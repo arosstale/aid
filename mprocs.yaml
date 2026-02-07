@@ -1,26 +1,20 @@
-# Pi Builder Ralph Loop - mprocs configuration
-# Runs multiple processes to support Pi Builder development
+cwd: .
 
 procs:
-  - name: "📖 Research Overview"
-    cmd: 'cat 00_README_PI_BUILDER.md'
-    
-  - name: "📝 Research Summary"
-    cmd: 'cat RESEARCH_SUMMARY.md'
-    
-  - name: "🚀 Quick Reference"
-    cmd: 'cat QUICK_REFERENCE.md'
-    
-  - name: "🛠️  Ralph Loop Prompt"
-    cmd: 'cat PI_BUILDER_PROMPT.md'
-    
-  - name: "📊 PRD (24 Stories)"
-    cmd: 'cat PI_BUILDER_PRD.json'
-    
-  - name: "📍 Git Status"
-    cmd: 'watch -n 2 "git log --oneline -10 && echo && git status --short"'
-    
-  - name: "📄 Progress Log"
-    cmd: 'tail -f PI_BUILDER_PROGRESS.txt'
+  - name: Documentation
+    cmd: cat 00_README_PI_BUILDER.md
 
-cwd: C:\Users\Artale\Projects\gh-repo
+  - name: Research
+    cmd: cat RESEARCH_SUMMARY.md
+
+  - name: Quick Start
+    cmd: cat START_HERE_PI_BUILDER.md
+
+  - name: Git Status
+    cmd: bash -c "git status --short && echo && git log --oneline -5"
+
+  - name: PRD
+    cmd: bash -c "node -e \"const p=JSON.parse(require('fs').readFileSync('PI_BUILDER_PRD.json')); const done=p.stories.filter(s=>s.passes).length; console.log('Stories: '+done+'/'+p.stories.length); p.stories.filter(s=>!s.passes).slice(0,10).forEach(s=>console.log('['+s.id+'] '+s.title));\" && sleep 2"
+
+  - name: Progress Log
+    cmd: tail -30 PI_BUILDER_PROGRESS.txt
