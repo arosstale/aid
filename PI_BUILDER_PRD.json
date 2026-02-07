@@ -1,0 +1,319 @@
+{
+  "name": "Pi Builder",
+  "version": "0.1.0",
+  "description": "Scaffolding & package builder for Pi ecosystem. Self-hostable, extensible code generator.",
+  "license": "MIT",
+  "stories": [
+    {
+      "id": "001",
+      "title": "Initialize Pi Builder monorepo structure",
+      "description": "Set up pnpm workspace with core packages (@pi-builder/cli, @pi-builder/core, @pi-builder/templates)",
+      "acceptance": [
+        "pnpm-workspace.yaml created",
+        "Root package.json with workspaces",
+        "Three package dirs created (cli, core, templates)",
+        "pnpm install runs without errors"
+      ],
+      "priority": "critical",
+      "passes": false
+    },
+    {
+      "id": "002",
+      "title": "Create @pi-builder/core package",
+      "description": "Core module for template parsing, file generation, context management",
+      "acceptance": [
+        "Package structure: src/, dist/, package.json, tsconfig.json",
+        "Export: TemplateEngine, FileGenerator, ContextBuilder",
+        "npm run build && npm run test pass"
+      ],
+      "priority": "critical",
+      "passes": false
+    },
+    {
+      "id": "003",
+      "title": "Create @pi-builder/cli package",
+      "description": "Command-line interface for scaffolding projects",
+      "acceptance": [
+        "bin/pi-builder.ts entry point",
+        "Commands: init, generate, list, help",
+        "Help text comprehensive",
+        "Can execute without errors"
+      ],
+      "priority": "critical",
+      "passes": false
+    },
+    {
+      "id": "004",
+      "title": "Create @pi-builder/templates package",
+      "description": "Default templates (pi-app, pi-skill, pi-extension, pi-api)",
+      "acceptance": [
+        "templates/ dir with 4 template folders",
+        "Each template has template.json + files",
+        "Export: loadTemplate(), listTemplates()",
+        "Test loading each template"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "005",
+      "title": "Implement TemplateEngine in @pi-builder/core",
+      "description": "Parse template.json, validate variables, handle conditional blocks",
+      "acceptance": [
+        "Parse YAML/JSON template definitions",
+        "Variable interpolation ({{ var }})",
+        "Conditional blocks: {% if condition %} ... {% endif %}",
+        "Unit tests for all features"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "006",
+      "title": "Implement FileGenerator in @pi-builder/core",
+      "description": "Create files/dirs from template output, handle binary files",
+      "acceptance": [
+        "Create nested directory structures",
+        "Write text files with interpolated content",
+        "Copy binary files (images, fonts)",
+        "Handle file permissions"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "007",
+      "title": "Implement ContextBuilder in @pi-builder/core",
+      "description": "Gather user input, validate, build template context",
+      "acceptance": [
+        "Interactive prompts for template variables",
+        "Input validation with custom rules",
+        "Default values from template.json",
+        "Return validated context object"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "008",
+      "title": "Implement 'pi-builder init' command",
+      "description": "Interactive project initialization - ask questions, generate scaffold",
+      "acceptance": [
+        "Prompt for project name, description, template",
+        "Validate inputs",
+        "Generate project directory with files",
+        "Initialize git repo"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "009",
+      "title": "Implement 'pi-builder generate' command",
+      "description": "Generate code/files from template into existing project",
+      "acceptance": [
+        "Read template + context from flags/prompts",
+        "Generate into specified directory",
+        "Merge with existing files (no overwrite by default)",
+        "Show summary of created files"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "010",
+      "title": "Implement 'pi-builder list' command",
+      "description": "List available templates with descriptions",
+      "acceptance": [
+        "Show template name, description, author",
+        "Show template variables needed",
+        "Pretty table format or JSON",
+        "Filter by category if available"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "011",
+      "title": "Add pi-app template (basic Pi app skeleton)",
+      "description": "Template for creating a new Pi application project",
+      "acceptance": [
+        "template.json with variables: name, description, author, version",
+        "Scaffold: src/, tests/, dist/, package.json, README.md, tsconfig.json",
+        "Include .gitignore, .npmrc",
+        "Include sample code that compiles"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "012",
+      "title": "Add pi-skill template",
+      "description": "Template for creating a new Pi skill (extension point)",
+      "acceptance": [
+        "template.json with variables: name, description, skillType",
+        "Scaffold: src/skill.ts, tests/skill.test.ts, package.json",
+        "Include skill.json metadata file",
+        "Follow @pi-skill/ naming convention"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "013",
+      "title": "Add pi-extension template",
+      "description": "Template for creating a Pi extension (tools, commands)",
+      "acceptance": [
+        "template.json with variables: name, extensionType",
+        "Scaffold: src/index.ts, src/extension.json",
+        "Include metadata: tools[], commands[]",
+        "Follow @pi-extension/ naming"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "014",
+      "title": "Add pi-api template",
+      "description": "Template for REST/GraphQL API projects using Pi",
+      "acceptance": [
+        "template.json with variables: name, apiType (rest/graphql)",
+        "Scaffold: src/server.ts, src/routes/, tests/",
+        "Include package.json with express/apollo",
+        "Include .env.example"
+      ],
+      "priority": "low",
+      "passes": false
+    },
+    {
+      "id": "015",
+      "title": "Add package discovery system",
+      "description": "Allow registering custom templates from external packages",
+      "acceptance": [
+        "TemplateRegistry class with register(), resolve()",
+        "Load templates from npm packages (@pi-templates/*)",
+        "Cache discovery results",
+        "Support local file:// URIs"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "016",
+      "title": "Implement config file support (.pi-builder.json)",
+      "description": "Store generator preferences, custom templates, defaults",
+      "acceptance": [
+        "Load .pi-builder.json from project root / home dir",
+        "Merge with CLI flags (flags > config > defaults)",
+        "Config schema validation",
+        "Support environment variable interpolation"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "017",
+      "title": "Add TypeScript support + type generation",
+      "description": "Auto-generate type definitions for templates from schema",
+      "acceptance": [
+        "JSON Schema support in template.json",
+        "Generate .d.ts from schema",
+        "Include types in generated project",
+        "Validate generated types with tsc"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "018",
+      "title": "Build plugin system for custom generators",
+      "description": "Allow extending pi-builder with custom generation hooks",
+      "acceptance": [
+        "Hook system: pre-generate, post-generate, validate",
+        "Load .js/.ts plugins from config",
+        "Plugin API with context + utilities",
+        "Example plugin included"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "019",
+      "title": "Add validation & linting for templates",
+      "description": "Command to validate template definitions + generated output",
+      "acceptance": [
+        "Validate template.json schema",
+        "Check file paths for conflicts",
+        "Run eslint/prettier on generated code",
+        "Report errors + warnings"
+      ],
+      "priority": "medium",
+      "passes": false
+    },
+    {
+      "id": "020",
+      "title": "Implement local development server (pi-builder dev)",
+      "description": "Watch templates, rebuild, reload - for template developers",
+      "acceptance": [
+        "Watch templates/ for changes",
+        "Fast rebuild on change",
+        "Serve test page with template preview",
+        "Live reload browser"
+      ],
+      "priority": "low",
+      "passes": false
+    },
+    {
+      "id": "021",
+      "title": "Add integration tests (e2e templates)",
+      "description": "Generate full projects, verify they build + run",
+      "acceptance": [
+        "E2E test: init → pnpm install → pnpm build → pnpm test",
+        "Test all 4 built-in templates",
+        "Verify generated code is functional",
+        "CI integration ready"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "022",
+      "title": "Write comprehensive CLI documentation",
+      "description": "README, API docs, template authoring guide",
+      "acceptance": [
+        "Main README with quick start",
+        "API documentation for core package",
+        "Template authoring guide + examples",
+        "Troubleshooting section"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "023",
+      "title": "Set up GitHub Actions CI/CD",
+      "description": "Lint, test, build, publish pipeline",
+      "acceptance": [
+        "Workflow: lint → test → build → coverage",
+        "Auto-publish to npm on tag",
+        "Pre-release to npm canary",
+        "Status badge in README"
+      ],
+      "priority": "high",
+      "passes": false
+    },
+    {
+      "id": "024",
+      "title": "Prepare for self-hosting (OpenClaw deployment)",
+      "description": "Docker image, deploy docs, environment setup",
+      "acceptance": [
+        "Dockerfile for pi-builder CLI container",
+        "docker-compose.yml for full stack",
+        "Deployment guide for OpenClaw",
+        "Health check endpoints"
+      ],
+      "priority": "medium",
+      "passes": false
+    }
+  ]
+}
