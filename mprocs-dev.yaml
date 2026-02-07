@@ -1,0 +1,20 @@
+# Pi Builder Development - mprocs TUI
+# Run multiple development processes simultaneously
+
+procs:
+  - name: "📚 Documentation"
+    cmd: 'code 00_README_PI_BUILDER.md QUICK_REFERENCE.md RESEARCH_SUMMARY.md START_HERE_PI_BUILDER.md'
+    
+  - name: "🔄 Git Monitor"
+    cmd: 'bash -c "clear; while true; do echo \"=== GIT LOG ===\"  && git log --oneline -5 && echo && echo \"=== GIT STATUS ===\" && git status --short && sleep 3 && clear; done"'
+    
+  - name: "📊 PRD Viewer"
+    cmd: 'bash -c "clear; while true; do node -e \"const p=JSON.parse(require('\'fs'\'').readFileSync('\'PI_BUILDER_PRD.json'\'')); const total=p.stories.length; const done=p.stories.filter(s=>s.passes).length; console.log('\'✅ Complete: '\''+done+'\''/'\''+total); p.stories.filter(s=>!s.passes).slice(0,3).forEach(s=>console.log('\'  - ['\''+s.id+'\''] '\''+s.title));\" && sleep 5 && clear; done"'
+    
+  - name: "📝 Code Editor"
+    cmd: 'code .'
+    
+  - name: "🔍 File Explorer"
+    cmd: 'bash -c "clear; while true; do echo \"=== PI_BUILDER FILES ===\" && ls -lh PI_BUILDER*.* | awk '\''{print $9, \"(\" $5 \")\"}'\'' && echo && echo \"=== RESEARCH FILES ===\" && ls -lh RESEARCH*.* | awk '\''{print $9, \"(\" $5 \")\"}'\'' && sleep 10 && clear; done"'
+
+cwd: C:\Users\Artale\Projects\gh-repo

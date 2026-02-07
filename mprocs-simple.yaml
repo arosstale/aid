@@ -1,0 +1,23 @@
+# Pi Builder Ralph Loop - Simple mprocs setup
+# For reading documentation and tracking progress
+
+procs:
+  - name: Main README
+    cmd: cat 00_README_PI_BUILDER.md
+    cwd: .
+
+  - name: Research Summary
+    cmd: cat RESEARCH_SUMMARY.md
+    cwd: .
+
+  - name: Quick Start
+    cmd: cat START_HERE_PI_BUILDER.md
+    cwd: .
+
+  - name: Git Log
+    cmd: bash -c "git log --oneline -15"
+    cwd: .
+
+  - name: Progress
+    cmd: cat PI_BUILDER_PROGRESS.txt
+    cwd: .
