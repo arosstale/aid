@@ -1,20 +1,9 @@
-cwd: .
-
 procs:
-  - name: Documentation
+  - name: README
     cmd: cat 00_README_PI_BUILDER.md
-
   - name: Research
     cmd: cat RESEARCH_SUMMARY.md
-
-  - name: Quick Start
-    cmd: cat START_HERE_PI_BUILDER.md
-
-  - name: Git Status
-    cmd: bash -c "git status --short && echo && git log --oneline -5"
-
-  - name: PRD
-    cmd: bash -c "node -e \"const p=JSON.parse(require('fs').readFileSync('PI_BUILDER_PRD.json')); const done=p.stories.filter(s=>s.passes).length; console.log('Stories: '+done+'/'+p.stories.length); p.stories.filter(s=>!s.passes).slice(0,10).forEach(s=>console.log('['+s.id+'] '+s.title));\" && sleep 2"
-
-  - name: Progress Log
-    cmd: tail -30 PI_BUILDER_PROGRESS.txt
+  - name: Git Log
+    cmd: git log --oneline -10
+  - name: Status
+    cmd: git status
