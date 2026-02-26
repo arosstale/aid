@@ -1,0 +1,14 @@
+# Archived planning docs from agent sessions
+_archive/
+
+# Temp files
+*.tmp
+nul
+
+# IDE
+.vscode/
+.idea/
+
+# Pi internal state
+.pi/messenger/
+.pi/cleanup-plan.json
