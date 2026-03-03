@@ -195,12 +195,13 @@
 <div class="deck">
 
   <!-- ======== SLIDE 1: TITLE ======== -->
-  <section class="slide slide--title">
-    <svg class="slide__decor" style="top:0;right:0;" width="120" height="120" viewBox="0 0 120 120"><line x1="120" y1="0" x2="120" y2="40" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="80" y1="0" x2="120" y2="0" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
-    <svg class="slide__decor" style="bottom:0;left:0;" width="120" height="120" viewBox="0 0 120 120"><line x1="0" y1="80" x2="0" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="0" y1="120" x2="40" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
-    <div class="reveal"><p class="slide__subtitle" style="margin-bottom:clamp(16px,2vh,32px);">OpenClaw Community &mdash; March 2026</p></div>
-    <h1 class="slide__display reveal">Agentic Engineering<br>with Pi &amp; OpenClaw</h1>
-    <div class="reveal"><p class="slide__subtitle" style="margin-top:clamp(16px,2vh,32px);">How I orchestrate 16 CLI agents into one workflow</p></div>
+  <section class="slide slide--title" style="background-image:url('img/04-orchestrator.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom, rgba(12,16,24,0.75) 0%, rgba(12,16,24,0.55) 40%, rgba(12,16,24,0.8) 100%);z-index:0;"></div>
+    <svg class="slide__decor" style="top:0;right:0;z-index:1;" width="120" height="120" viewBox="0 0 120 120"><line x1="120" y1="0" x2="120" y2="40" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="80" y1="0" x2="120" y2="0" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
+    <svg class="slide__decor" style="bottom:0;left:0;z-index:1;" width="120" height="120" viewBox="0 0 120 120"><line x1="0" y1="80" x2="0" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="0" y1="120" x2="40" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
+    <div class="reveal" style="position:relative;z-index:1;"><p class="slide__subtitle" style="margin-bottom:clamp(16px,2vh,32px);color:rgba(255,255,255,0.7);">OpenClaw Community &mdash; March 2026</p></div>
+    <h1 class="slide__display reveal" style="position:relative;z-index:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.5);">Agentic Engineering<br>with Pi &amp; OpenClaw</h1>
+    <div class="reveal" style="position:relative;z-index:1;"><p class="slide__subtitle" style="margin-top:clamp(16px,2vh,32px);color:rgba(255,255,255,0.7);">How I orchestrate 16 CLI agents into one workflow</p></div>
   </section>
 
   <!-- ======== SLIDE 2: THE THESIS ======== -->
@@ -235,15 +236,7 @@
         </ul>
       </div>
       <div class="slide__aside reveal">
-        <svg viewBox="0 0 180 180" width="180" height="180">
-          <circle cx="90" cy="90" r="70" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.15"/>
-          <circle cx="90" cy="90" r="50" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.1" stroke-dasharray="4 4"/>
-          <text x="56" y="65" font-family="var(--font-mono)" font-size="11" fill="var(--green)">read</text>
-          <text x="110" y="65" font-family="var(--font-mono)" font-size="11" fill="var(--amber)">write</text>
-          <text x="56" y="125" font-family="var(--font-mono)" font-size="11" fill="var(--rose)">edit</text>
-          <text x="110" y="125" font-family="var(--font-mono)" font-size="11" fill="var(--accent)">bash</text>
-          <text x="90" y="95" text-anchor="middle" font-family="var(--font-mono)" font-size="13" font-weight="700" fill="var(--text)">pi</text>
-        </svg>
+        <img src="img/01-pi-core.png" alt="Pi's 4 core tools" style="max-width:100%;max-height:300px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       </div>
     </div>
   </section>
@@ -368,9 +361,10 @@
   </section>
 
   <!-- ======== SLIDE 11: DIVIDER ======== -->
-  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 80% 60%, var(--green-dim) 0%, transparent 40%);">
-    <span class="slide__number">04</span>
-    <div>
+  <section class="slide slide--divider" style="background-image:url('img/03-blueprint-engine.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(12,16,24,0.82) 0%, rgba(12,16,24,0.6) 50%, rgba(12,16,24,0.82) 100%);z-index:0;"></div>
+    <span class="slide__number" style="z-index:1;">04</span>
+    <div style="position:relative;z-index:1;">
       <h2 class="slide__heading reveal">The Blueprint Engine</h2>
       <p class="slide__subtitle reveal" style="margin-top:12px;">Deterministic wrapping non-deterministic</p>
     </div>
@@ -449,22 +443,7 @@
         </ul>
       </div>
       <div class="slide__aside reveal">
-        <svg viewBox="0 0 180 180" width="180" height="180">
-          <circle cx="90" cy="90" r="30" fill="var(--rose-dim)" stroke="var(--rose)" stroke-width="2"/>
-          <text x="90" y="94" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--rose)" font-weight="700">OC</text>
-          <circle cx="38" cy="40" r="16" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1"/>
-          <text x="38" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="8" fill="var(--accent)">pi</text>
-          <circle cx="142" cy="40" r="16" fill="var(--green-dim)" stroke="var(--green)" stroke-width="1"/>
-          <text x="142" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--green)">claude</text>
-          <circle cx="38" cy="140" r="16" fill="var(--amber-dim)" stroke="var(--amber)" stroke-width="1"/>
-          <text x="38" y="144" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--amber)">codex</text>
-          <circle cx="142" cy="140" r="16" fill="var(--teal-dim)" stroke="var(--teal)" stroke-width="1"/>
-          <text x="142" y="144" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--teal)">gemini</text>
-          <line x1="55" y1="52" x2="70" y2="70" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
-          <line x1="125" y1="52" x2="110" y2="70" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
-          <line x1="55" y1="128" x2="70" y2="110" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
-          <line x1="125" y1="128" x2="110" y2="110" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
-        </svg>
+        <img src="img/02-openclaw-hub.png" alt="OpenClaw as hub connecting all agents" style="max-width:100%;max-height:300px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       </div>
     </div>
   </section>
