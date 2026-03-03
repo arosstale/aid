@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Engineering with Pi &amp; OpenClaw — Community Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+    --bg: #0c1018;
+    --surface: #141b28;
+    --surface2: #1a2436;
+    --surface-elevated: #1f2d44;
+    --border: rgba(100, 200, 255, 0.06);
+    --border-bright: rgba(100, 200, 255, 0.14);
+    --text: #e2e8f0;
+    --text-dim: #8896a8;
+    --accent: #38bdf8;
+    --accent-dim: rgba(56, 189, 248, 0.08);
+    --code-bg: #080c14;
+    --code-text: #cbd5e1;
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.08);
+    --red: #f87171;
+    --red-dim: rgba(248, 113, 113, 0.08);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251, 191, 36, 0.08);
+    --rose: #fb7185;
+    --rose-dim: rgba(251, 113, 133, 0.08);
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45, 212, 191, 0.08);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --surface-elevated: #ffffff;
+      --border: rgba(0, 30, 60, 0.08);
+      --border-bright: rgba(0, 30, 60, 0.14);
+      --text: #0f172a;
+      --text-dim: #64748b;
+      --accent: #0284c7;
+      --accent-dim: rgba(2, 132, 199, 0.06);
+      --code-bg: #1e293b;
+      --code-text: #e2e8f0;
+      --green: #059669;
+      --green-dim: rgba(5, 150, 105, 0.06);
+      --red: #dc2626;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --teal: #0d9488;
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-body); color: var(--text); background: var(--bg); overflow: hidden; }
+
+  .deck { height: 100dvh; overflow-y: auto; scroll-snap-type: y mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+
+  .slide {
+    height: 100dvh; scroll-snap-align: start; overflow: hidden; position: relative;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: clamp(40px, 6vh, 80px) clamp(40px, 8vw, 120px);
+    isolation: isolate;
+    opacity: 0; transform: translateY(40px) scale(0.98);
+    transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  }
+  .slide.visible { opacity: 1; transform: none; }
+  .slide .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .slide.visible .reveal { opacity: 1; transform: none; }
+  .slide.visible .reveal:nth-child(1) { transition-delay: 0.1s; }
+  .slide.visible .reveal:nth-child(2) { transition-delay: 0.2s; }
+  .slide.visible .reveal:nth-child(3) { transition-delay: 0.3s; }
+  .slide.visible .reveal:nth-child(4) { transition-delay: 0.4s; }
+  .slide.visible .reveal:nth-child(5) { transition-delay: 0.5s; }
+  .slide.visible .reveal:nth-child(6) { transition-delay: 0.6s; }
+  .slide.visible .reveal:nth-child(7) { transition-delay: 0.7s; }
+
+  @media (prefers-reduced-motion: reduce) { .slide, .slide .reveal { opacity:1!important; transform:none!important; transition:none!important; } }
+
+  /* NAV CHROME */
+  .deck-progress { position:fixed; top:0; left:0; height:3px; background:var(--accent); z-index:100; transition:width 0.3s ease; pointer-events:none; }
+  .deck-dots { position:fixed; right:clamp(12px,2vw,24px); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:8px; z-index:100; padding:8px; background:color-mix(in srgb, var(--bg) 60%, transparent 40%); border-radius:20px; backdrop-filter:blur(4px); }
+  .deck-dot { width:8px; height:8px; border-radius:50%; background:var(--text-dim); opacity:0.3; border:none; padding:0; cursor:pointer; transition:opacity 0.2s, transform 0.2s; }
+  .deck-dot:hover { opacity:0.6; }
+  .deck-dot.active { opacity:1; transform:scale(1.5); background:var(--accent); }
+  .deck-counter { position:fixed; bottom:clamp(12px,2vh,24px); right:clamp(12px,2vw,24px); font-family:var(--font-mono); font-size:12px; color:var(--text-dim); z-index:100; font-variant-numeric:tabular-nums; }
+  .deck-hints { position:fixed; bottom:clamp(12px,2vh,24px); left:50%; transform:translateX(-50%); font-family:var(--font-mono); font-size:11px; color:var(--text-dim); opacity:0.6; z-index:100; transition:opacity 0.5s; white-space:nowrap; }
+  .deck-hints.faded { opacity:0; pointer-events:none; }
+
+  /* SHARED */
+  .slide__display { font-size:clamp(48px,10vw,110px); font-weight:800; letter-spacing:-3px; line-height:0.95; text-wrap:balance; }
+  .slide__heading { font-size:clamp(28px,5vw,48px); font-weight:700; letter-spacing:-1px; line-height:1.1; text-wrap:balance; }
+  .slide__body { font-size:clamp(16px,2.2vw,22px); line-height:1.6; color:var(--text-dim); text-wrap:pretty; }
+  .slide__subtitle { font-family:var(--font-mono); font-size:clamp(12px,1.5vw,18px); color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+  .slide__label { font-family:var(--font-mono); font-size:clamp(10px,1.2vw,13px); font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--accent); margin-bottom:12px; }
+  .slide__decor { position:absolute; pointer-events:none; z-index:0; }
+
+  /* TITLE */
+  .slide--title { justify-content:center; align-items:center; text-align:center; background-image:radial-gradient(ellipse at 50% 30%, var(--accent-dim) 0%, transparent 50%); }
+  .slide--title .slide__display { color:var(--accent); }
+
+  /* DIVIDER */
+  .slide--divider { justify-content:center; }
+  .slide--divider .slide__number { font-size:clamp(100px,22vw,260px); font-weight:200; line-height:0.85; opacity:0.05; position:absolute; top:50%; left:50%; transform:translate(-50%,-55%); pointer-events:none; color:var(--accent); }
+
+  /* CONTENT */
+  .slide--content .slide__inner { display:grid; grid-template-columns:3fr 2fr; gap:clamp(24px,4vw,60px); align-items:center; width:100%; }
+  .slide__bullets { list-style:none; padding:0; }
+  .slide__bullets li { padding:10px 0 10px 24px; position:relative; font-size:clamp(16px,2vw,22px); line-height:1.5; color:var(--text-dim); }
+  .slide__bullets li::before { content:''; position:absolute; left:0; top:20px; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .slide__aside { display:flex; align-items:center; justify-content:center; min-height:200px; }
+
+  /* SPLIT */
+  .slide--split { padding:0; }
+  .slide--split .slide__panels { display:grid; grid-template-columns:1fr 1fr; height:100%; }
+  .slide--split .slide__panel { padding:clamp(40px,6vh,80px) clamp(32px,4vw,60px); display:flex; flex-direction:column; justify-content:center; }
+  .slide--split .slide__panel--primary { background:var(--surface); }
+  .slide--split .slide__panel--secondary { background:var(--surface2); }
+
+  /* DASHBOARD */
+  .slide--dashboard .slide__kpis { display:grid; grid-template-columns:repeat(auto-fit, minmax(clamp(140px,20vw,220px),1fr)); gap:clamp(12px,2vw,24px); }
+  .slide__kpi { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:clamp(16px,3vh,32px) clamp(16px,2vw,24px); }
+  .slide__kpi-val { font-size:clamp(36px,6vw,64px); font-weight:800; letter-spacing:-1.5px; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .slide__kpi-label { font-family:var(--font-mono); font-size:clamp(9px,1.2vw,13px); font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); margin-top:8px; }
+  .slide__kpi-trend { font-family:var(--font-mono); font-size:12px; margin-top:4px; }
+
+  /* TABLE */
+  .slide--table { padding:clamp(24px,4vh,48px) clamp(24px,4vw,60px); }
+  .table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:12px; overflow:hidden; flex:1; min-height:0; }
+  .table-scroll { overflow-x:auto; }
+  .data-table { width:100%; border-collapse:collapse; }
+  .data-table th { background:var(--surface2); font-family:var(--font-mono); font-size:clamp(10px,1.3vw,14px); font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--text-dim); text-align:left; padding:clamp(10px,1.5vh,16px) clamp(14px,2vw,24px); border-bottom:2px solid var(--border-bright); white-space:nowrap; }
+  .data-table td { padding:clamp(10px,1.5vh,16px) clamp(14px,2vw,24px); border-bottom:1px solid var(--border); font-size:clamp(14px,1.8vw,20px); vertical-align:top; }
+  .data-table tbody tr:last-child td { border-bottom:none; }
+  .data-table tbody tr:nth-child(even) { background:var(--surface2); }
+  .data-table tbody tr { transition:background 0.15s; }
+  .data-table tbody tr:hover { background:var(--accent-dim); }
+  .data-table code { font-family:var(--font-mono); font-size:0.85em; background:var(--accent-dim); color:var(--accent); padding:1px 5px; border-radius:3px; }
+
+  /* CODE */
+  .slide--code { align-items:center; }
+  .slide__code-block { background:var(--code-bg); border:1px solid var(--border); border-radius:12px; padding:clamp(24px,4vh,48px) clamp(24px,4vw,48px); max-width:900px; width:100%; position:relative; }
+  .slide__code-filename { position:absolute; top:-12px; left:24px; font-family:var(--font-mono); font-size:11px; font-weight:600; padding:4px 12px; border-radius:4px; background:var(--accent); color:var(--bg); }
+  .slide__code-block pre { margin:0; overflow-x:auto; }
+  .slide__code-block code { font-family:var(--font-mono); font-size:clamp(14px,1.6vw,18px); line-height:1.7; color:var(--code-text); }
+  .slide__code-block .hl { color:var(--accent); }
+  .slide__code-block .cm { color:var(--text-dim); }
+  .slide__code-block .str { color:var(--green); }
+  .slide__code-block .kw { color:var(--rose); }
+
+  /* QUOTE */
+  .slide--quote { justify-content:center; align-items:center; text-align:center; padding:clamp(60px,10vh,120px) clamp(60px,12vw,200px); }
+  .slide__quote-mark { font-size:clamp(80px,14vw,180px); line-height:0.5; opacity:0.05; font-family:Georgia,serif; pointer-events:none; margin-bottom:-20px; color:var(--accent); }
+  .slide--quote blockquote { font-size:clamp(24px,4vw,44px); font-weight:500; line-height:1.35; font-style:italic; }
+  .slide--quote cite { font-family:var(--font-mono); font-size:clamp(11px,1.4vw,14px); font-style:normal; margin-top:clamp(16px,3vh,32px); display:block; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-dim); }
+
+  /* FULL-BLEED */
+  .slide--bleed { padding:0; justify-content:flex-end; }
+  .slide__bg { position:absolute; inset:0; background-size:cover; background-position:center; z-index:0; }
+  .slide__bg--grad1 { background:linear-gradient(135deg, #0c1018 0%, #0f2027 40%, #1a3a4a 100%); }
+  .slide__bg--grad2 { background:linear-gradient(135deg, #1a0a2e 0%, #0c1018 40%, #0a1628 100%); }
+  .slide__scrim { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.2) 40%, transparent 100%); z-index:1; }
+  .slide--bleed .slide__content { position:relative; z-index:2; padding:clamp(40px,6vh,80px) clamp(40px,8vw,120px); color:#fff; }
+  .slide--bleed .slide__heading { color:#fff; }
+  .slide--bleed .slide__subtitle { color:rgba(255,255,255,0.7); }
+
+  /* COMPACT LIST CARD */
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:16px; margin-top:16px; }
+  .mini-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .mini-card h4 { font-size:clamp(14px,1.6vw,18px); font-weight:700; margin-bottom:6px; }
+  .mini-card p { font-size:clamp(12px,1.3vw,16px); color:var(--text-dim); line-height:1.4; }
+  .mini-card code { font-family:var(--font-mono); font-size:0.85em; color:var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-height:700px) { .slide { padding:clamp(24px,4vh,40px) clamp(32px,6vw,80px); } .slide__display { font-size:clamp(36px,8vw,72px); } }
+  @media (max-height:500px) { .deck-dots { display:none; } }
+  @media (max-width:768px) {
+    .slide--content .slide__inner { grid-template-columns:1fr; }
+    .slide--content .slide__aside { display:none; }
+    .slide--split .slide__panels { grid-template-columns:1fr; }
+    .slide--dashboard .slide__kpis { grid-template-columns:repeat(2,1fr); }
+    .card-grid { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ======== SLIDE 1: TITLE ======== -->
+  <section class="slide slide--title">
+    <svg class="slide__decor" style="top:0;right:0;" width="120" height="120" viewBox="0 0 120 120"><line x1="120" y1="0" x2="120" y2="40" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="80" y1="0" x2="120" y2="0" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
+    <svg class="slide__decor" style="bottom:0;left:0;" width="120" height="120" viewBox="0 0 120 120"><line x1="0" y1="80" x2="0" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="0" y1="120" x2="40" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
+    <div class="reveal"><p class="slide__subtitle" style="margin-bottom:clamp(16px,2vh,32px);">OpenClaw Community &mdash; March 2026</p></div>
+    <h1 class="slide__display reveal">Agentic Engineering<br>with Pi &amp; OpenClaw</h1>
+    <div class="reveal"><p class="slide__subtitle" style="margin-top:clamp(16px,2vh,32px);">How I orchestrate 16 CLI agents into one workflow</p></div>
+  </section>
+
+  <!-- ======== SLIDE 2: THE THESIS ======== -->
+  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--accent-dim) 0%, transparent 35%);">
+    <div class="slide__quote-mark reveal">&ldquo;</div>
+    <blockquote class="reveal">Prompts are code,<br>.json and .md files are state.</blockquote>
+    <cite class="reveal">&mdash; Mario Zechner, Pi Creator</cite>
+  </section>
+
+  <!-- ======== SLIDE 3: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 80% 60%, var(--accent-dim) 0%, transparent 40%);">
+    <span class="slide__number">01</span>
+    <div>
+      <h2 class="slide__heading reveal">The Pi Philosophy</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">4 tools. Zero MCP. Maximum control.</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 4: PI CORE ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 20% 80%, var(--accent-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal">Pi's Radical Minimalism</p>
+        <h2 class="slide__heading reveal">The Shortest System Prompt in the Industry</h2>
+        <ul class="slide__bullets">
+          <li class="reveal">Only 4 tools: <code>read</code>, <code>write</code>, <code>edit</code>, <code>bash</code></li>
+          <li class="reveal">System prompt + tools &lt; 1,000 tokens total</li>
+          <li class="reveal">Multi-provider: Anthropic, OpenAI, Google, xAI, Groq, OpenRouter</li>
+          <li class="reveal">Mid-session model switching with context handoff</li>
+          <li class="reveal">No MCP &mdash; CLI tools + progressive disclosure instead</li>
+          <li class="reveal">Top of Terminal-Bench 2.0 with Claude Opus</li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <svg viewBox="0 0 180 180" width="180" height="180">
+          <circle cx="90" cy="90" r="70" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.15"/>
+          <circle cx="90" cy="90" r="50" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.1" stroke-dasharray="4 4"/>
+          <text x="56" y="65" font-family="var(--font-mono)" font-size="11" fill="var(--green)">read</text>
+          <text x="110" y="65" font-family="var(--font-mono)" font-size="11" fill="var(--amber)">write</text>
+          <text x="56" y="125" font-family="var(--font-mono)" font-size="11" fill="var(--rose)">edit</text>
+          <text x="110" y="125" font-family="var(--font-mono)" font-size="11" fill="var(--accent)">bash</text>
+          <text x="90" y="95" text-anchor="middle" font-family="var(--font-mono)" font-size="13" font-weight="700" fill="var(--text)">pi</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 5: WHY NO MCP ======== -->
+  <section class="slide slide--split">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--red);">MCP Servers</p>
+        <h2 class="slide__heading reveal" style="font-size:clamp(22px,3.5vw,36px);">Token-Hungry</h2>
+        <ul class="slide__bullets" style="margin-top:16px;">
+          <li class="reveal">Playwright MCP: 21 tools, 13,700 tokens</li>
+          <li class="reveal">Chrome DevTools MCP: 26 tools, 18,000 tokens</li>
+          <li class="reveal">Tool descriptions loaded every session</li>
+          <li class="reveal">Outputs can't be piped or composed</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary">
+        <p class="slide__label reveal" style="color:var(--green);">Bash CLI Tools</p>
+        <h2 class="slide__heading reveal" style="font-size:clamp(22px,3.5vw,36px);">225 Tokens</h2>
+        <ul class="slide__bullets" style="margin-top:16px;">
+          <li class="reveal">4 scripts: start, navigate, eval, screenshot</li>
+          <li class="reveal">README loaded only when needed</li>
+          <li class="reveal">Composable via Unix pipes</li>
+          <li class="reveal">Agent can write new tools on the fly</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 6: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 30% 40%, var(--accent-dim) 0%, transparent 40%);">
+    <span class="slide__number">02</span>
+    <div>
+      <h2 class="slide__heading reveal">Pi → OpenClaw</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">From coding agent to personal agent</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 7: THE EVOLUTION ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 70% 30%, var(--teal-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal" style="color:var(--teal);">As Armin Ronacher describes it</p>
+        <h2 class="slide__heading reveal">Software Building Software</h2>
+        <ul class="slide__bullets">
+          <li class="reveal"><strong>Pi</strong> = the minimal coding agent (4 tools + extensions)</li>
+          <li class="reveal"><strong>OpenClaw</strong> = Pi with the UI stripped, connected to chat</li>
+          <li class="reveal">Extensions persist state into sessions &mdash; agents maintain their own tooling</li>
+          <li class="reveal">Session trees: branch to explore, rewind to resume</li>
+          <li class="reveal">Hot-reloading: agent writes code, reloads, tests, loops</li>
+          <li class="reveal">Need a capability? Don't download it &mdash; ask the agent to build it</li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <svg viewBox="0 0 200 160" width="200" height="160">
+          <rect x="40" y="10" width="120" height="40" rx="8" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="100" y="35" text-anchor="middle" font-family="var(--font-mono)" font-size="13" fill="var(--accent)" font-weight="600">pi-ai</text>
+          <rect x="40" y="65" width="120" height="40" rx="8" fill="var(--teal-dim)" stroke="var(--teal)" stroke-width="1.5"/>
+          <text x="100" y="90" text-anchor="middle" font-family="var(--font-mono)" font-size="13" fill="var(--teal)" font-weight="600">pi-coding-agent</text>
+          <rect x="10" y="120" width="85" height="32" rx="6" fill="var(--green-dim)" stroke="var(--green)" stroke-width="1"/>
+          <text x="52" y="140" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--green)">OpenClaw</text>
+          <rect x="105" y="120" width="85" height="32" rx="6" fill="var(--amber-dim)" stroke="var(--amber)" stroke-width="1"/>
+          <text x="147" y="140" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--amber)">Your CLI</text>
+          <line x1="100" y1="50" x2="100" y2="65" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="55" y1="105" x2="55" y2="120" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="145" y1="105" x2="145" y2="120" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 8: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 60% 50%, var(--amber-dim) 0%, transparent 40%);">
+    <span class="slide__number">03</span>
+    <div>
+      <h2 class="slide__heading reveal">My Setup</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">16 CLIs, one orchestration layer</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 9: TOOL INVENTORY ======== -->
+  <section class="slide slide--table">
+    <p class="slide__label reveal">The Full Stack</p>
+    <h2 class="slide__heading reveal">16 CLIs Across Every Major Provider</h2>
+    <div class="table-wrap reveal" style="flex:1; min-height:0; margin-top:clamp(8px,1.5vh,20px);">
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>Layer</th><th>Tools</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>Local Agents</td><td><code>pi</code> <code>claude</code> <code>gemini</code> <code>codex</code> <code>aider</code> <code>goose</code> <code>amp</code> <code>cursor</code></td><td>8 coding agents, any model, any provider</td></tr>
+            <tr><td>Remote Backends</td><td><code>gh agent-task</code> <code>jules-client.sh</code> <code>e2b</code></td><td>Cloud sandboxes &mdash; fire-and-forget builds</td></tr>
+            <tr><td>Platform</td><td><code>OpenClaw</code></td><td>Pi as a personal agent connected to chat</td></tr>
+            <tr><td>Tool CLIs</td><td><code>docker</code> <code>gh</code> <code>beepctl</code> <code>pi-messenger</code></td><td>Infrastructure + coordination</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 10: DASHBOARD ======== -->
+  <section class="slide slide--dashboard" style="background-image:radial-gradient(ellipse at 70% 30%, var(--accent-dim) 0%, transparent 40%);">
+    <p class="slide__label reveal">Why Multi-CLI Matters</p>
+    <h2 class="slide__heading reveal">Three Kinds of Agnostic</h2>
+    <div class="slide__kpis" style="margin-top:clamp(12px,2vh,24px);">
+      <div class="slide__kpi reveal">
+        <div class="slide__kpi-val" style="color:var(--accent);">Model</div>
+        <div class="slide__kpi-label">Agnostic</div>
+        <div class="slide__kpi-trend" style="color:var(--text-dim);">GPT-5 drops? Add a CLI.</div>
+      </div>
+      <div class="slide__kpi reveal">
+        <div class="slide__kpi-val" style="color:var(--green);">Tool</div>
+        <div class="slide__kpi-label">Agnostic</div>
+        <div class="slide__kpi-trend" style="color:var(--text-dim);">Cursor dies? 7 agents remain.</div>
+      </div>
+      <div class="slide__kpi reveal">
+        <div class="slide__kpi-val" style="color:var(--amber);">Cost</div>
+        <div class="slide__kpi-label">Agnostic</div>
+        <div class="slide__kpi-trend" style="color:var(--text-dim);">Scout on Haiku. Builder on Sonnet.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 11: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 80% 60%, var(--green-dim) 0%, transparent 40%);">
+    <span class="slide__number">04</span>
+    <div>
+      <h2 class="slide__heading reveal">The Blueprint Engine</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">Deterministic wrapping non-deterministic</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 12: [D][N] PATTERN ======== -->
+  <section class="slide slide--code" style="background-image:radial-gradient(ellipse at 50% 80%, var(--green-dim) 0%, transparent 40%);">
+    <p class="slide__label reveal" style="text-align:center;">The Core Pattern</p>
+    <h2 class="slide__heading reveal" style="text-align:center;">Deterministic [D] + Non-Deterministic [N]</h2>
+    <div class="slide__code-block reveal" style="margin-top:clamp(12px,2vh,24px);">
+      <span class="slide__code-filename">minion.sh</span>
+      <pre><code><span class="cm"># [D] Pre-compute — zero tokens wasted on exploration</span>
+<span class="hl">git diff</span> --name-only main..HEAD > changed.txt
+<span class="hl">pnpm test</span> --json > test-results.json
+
+<span class="cm"># [N] Agent works with perfect context</span>
+<span class="hl">pi</span> <span class="str">"Read context.json and implement the fix"</span>
+
+<span class="cm"># [D] Deterministic quality gates</span>
+<span class="hl">pnpm lint</span> && <span class="hl">pnpm test</span>
+
+<span class="cm"># [N] Agent reviews its own work</span>
+<span class="hl">pi</span> <span class="str">"Review the diff for bugs"</span>
+
+<span class="cm"># [D] Ship it</span>
+<span class="hl">gh pr create</span> --fill</code></pre>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 13: MARIO'S PROOF ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 80% 70%, var(--amber-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal" style="color:var(--amber);">Mario proved this at scale</p>
+        <h2 class="slide__heading reveal">Spine Runtimes Port</h2>
+        <ul class="slide__bullets">
+          <li class="reveal">4,820 insertions / 4,679 deletions across 79 Java files</li>
+          <li class="reveal"><code>generate-porting-plan.js</code> pre-computes entire changeset</li>
+          <li class="reveal"><code>porting-plan.json</code> = state on disk &mdash; resume from any point</li>
+          <li class="reveal"><code>jq</code> queries as the function library &mdash; pre-written, tested</li>
+          <li class="reveal">Human checkpoints: "Port this type? (y/n)" between each</li>
+          <li class="reveal"><strong>2-3 weeks manual → 2-3 days with agents</strong></li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <div style="text-align:center;">
+          <div style="font-size:clamp(48px,8vw,72px);font-weight:800;color:var(--amber);line-height:1;">10×</div>
+          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-top:8px;text-transform:uppercase;letter-spacing:1px;">Faster</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 14: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 30% 40%, var(--rose-dim) 0%, transparent 40%);">
+    <span class="slide__number">05</span>
+    <div>
+      <h2 class="slide__heading reveal">OpenClaw Integration</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">How it all connects</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 15: OPENCLAW AS HUB ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 40% 60%, var(--rose-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal" style="color:var(--rose);">OpenClaw = Pi + Chat</p>
+        <h2 class="slide__heading reveal">Your Agent, Everywhere</h2>
+        <ul class="slide__bullets">
+          <li class="reveal">Pi's <code>pi-ai</code> SDK under the hood &mdash; same models, same tools</li>
+          <li class="reveal">Connected to WhatsApp, Telegram, Discord, Slack</li>
+          <li class="reveal">Full computer access &mdash; reads files, runs code, deploys</li>
+          <li class="reveal"><code>mcporter</code> bridges MCP servers as CLI tools when needed</li>
+          <li class="reveal">Extensions + skills transfer directly from pi sessions</li>
+          <li class="reveal">Peter's vision: "Sci-fi with a touch of madness"</li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <svg viewBox="0 0 180 180" width="180" height="180">
+          <circle cx="90" cy="90" r="30" fill="var(--rose-dim)" stroke="var(--rose)" stroke-width="2"/>
+          <text x="90" y="94" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--rose)" font-weight="700">OC</text>
+          <circle cx="38" cy="40" r="16" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="38" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="8" fill="var(--accent)">pi</text>
+          <circle cx="142" cy="40" r="16" fill="var(--green-dim)" stroke="var(--green)" stroke-width="1"/>
+          <text x="142" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--green)">claude</text>
+          <circle cx="38" cy="140" r="16" fill="var(--amber-dim)" stroke="var(--amber)" stroke-width="1"/>
+          <text x="38" y="144" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--amber)">codex</text>
+          <circle cx="142" cy="140" r="16" fill="var(--teal-dim)" stroke="var(--teal)" stroke-width="1"/>
+          <text x="142" y="144" text-anchor="middle" font-family="var(--font-mono)" font-size="7" fill="var(--teal)">gemini</text>
+          <line x1="55" y1="52" x2="70" y2="70" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
+          <line x1="125" y1="52" x2="110" y2="70" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
+          <line x1="55" y1="128" x2="70" y2="110" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
+          <line x1="125" y1="128" x2="110" y2="110" stroke="var(--text-dim)" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 16: MY WORKFLOW ======== -->
+  <section class="slide slide--table">
+    <p class="slide__label reveal">How I Actually Use It</p>
+    <h2 class="slide__heading reveal">Daily Workflow</h2>
+    <div class="table-wrap reveal" style="flex:1; min-height:0; margin-top:clamp(8px,1.5vh,20px);">
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>Task</th><th>Tool</th><th>Thread Type</th></tr></thead>
+          <tbody>
+            <tr><td>Quick bug fix (in-loop, tight steering)</td><td><code>pi</code> or <code>claude</code></td><td>Single session &mdash; 1 agent</td></tr>
+            <tr><td>Feature implementation</td><td>Pi subagent chain: scout → plan → build → review</td><td>C-Thread (sequential pipeline)</td></tr>
+            <tr><td>PR triage (50 PRs in parallel)</td><td>50× <code>codex</code> dispatch → JSON signal reports</td><td>P-Thread (massively parallel)</td></tr>
+            <tr><td>Research question</td><td>3 Opus deep + 5 Haiku wide → consolidate</td><td>F-Thread (fusion)</td></tr>
+            <tr><td>Full end-to-end: issue → PR</td><td>Blueprint Engine: <code>minion.sh</code></td><td>B-Thread (orchestrator)</td></tr>
+            <tr><td>OpenClaw from phone</td><td>WhatsApp → OpenClaw → runs pi → reports back</td><td>Chat-triggered agent</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 17: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 60% 50%, var(--teal-dim) 0%, transparent 40%);">
+    <span class="slide__number">06</span>
+    <div>
+      <h2 class="slide__heading reveal">Prior Art: Overstory</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">Someone already shipped this</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 17b: OVERSTORY ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 60% 40%, var(--teal-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal" style="color:var(--teal);">jayminwest/overstory — MIT licensed, on npm</p>
+        <h2 class="slide__heading reveal">Multi-Agent CLI on Pi + Claude Code</h2>
+        <ul class="slide__bullets">
+          <li class="reveal">32 CLI commands: <code>ov sling</code>, <code>ov merge</code>, <code>ov trace</code>, <code>ov costs</code></li>
+          <li class="reveal">4 SQLite databases: mail, sessions, events, metrics</li>
+          <li class="reveal">Pluggable runtimes: Claude Code, Pi, Copilot, Codex</li>
+          <li class="reveal">STEELMAN.md: 12 honest risks of agent swarms</li>
+          <li class="reveal">Same agent roles: scout, builder, reviewer, merger</li>
+          <li class="reveal"><strong>What it lacks:</strong> Blueprint Engine [D]/[N], cost routing, cloud sandboxes</li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">installable now</div>
+          <div style="font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--teal);margin-top:8px;background:var(--teal-dim);padding:8px 12px;border-radius:6px;">bun install -g<br>@os-eco/overstory-cli</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 17c: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 40% 60%, var(--teal-dim) 0%, transparent 40%);">
+    <span class="slide__number">07</span>
+    <div>
+      <h2 class="slide__heading reveal">The Hard Truths</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">What actually works and what doesn't</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 18: WHAT WORKS / WHAT DOESN'T ======== -->
+  <section class="slide slide--split">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--green);">What Works</p>
+        <ul class="slide__bullets" style="margin-top:8px;">
+          <li class="reveal">Deterministic gates catch real bugs</li>
+          <li class="reveal">Pre-computing context eliminates waste</li>
+          <li class="reveal">Parallel analysis (50 agents on triage)</li>
+          <li class="reveal">In-loop steering for complex code</li>
+          <li class="reveal">Skills the agent wrote and maintains</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary">
+        <p class="slide__label reveal" style="color:var(--red);">What Doesn't</p>
+        <ul class="slide__bullets" style="margin-top:8px;">
+          <li class="reveal">Agent armies writing code unsupervised</li>
+          <li class="reveal">Trusting agents to find ALL needed context</li>
+          <li class="reveal">MCP servers eating 9% of your context</li>
+          <li class="reveal">Merging code you haven't read &mdash; <em>cognitive debt</em></li>
+          <li class="reveal">Measuring productivity with vibes, not numbers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 19: QUOTE ======== -->
+  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--rose-dim) 0%, transparent 35%);">
+    <div class="slide__quote-mark reveal">&ldquo;</div>
+    <blockquote class="reveal">Nobody knows yet how to do this properly. We are all just throwing shit at the wall, declaring victory, while secretly crying over all the tech debt.</blockquote>
+    <cite class="reveal">&mdash; Mario Zechner, Year in Review 2025</cite>
+  </section>
+
+  <!-- ======== SLIDE 20: DIVIDER ======== -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 30% 40%, var(--accent-dim) 0%, transparent 40%);">
+    <span class="slide__number">08</span>
+    <div>
+      <h2 class="slide__heading reveal">The Macro Picture</h2>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">Why this matters beyond code</p>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 21: THE MACRO ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 70% 30%, var(--rose-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div>
+        <p class="slide__label reveal" style="color:var(--rose);">The intelligence displacement spiral</p>
+        <h2 class="slide__heading reveal">Why Orchestration Skills Matter</h2>
+        <ul class="slide__bullets">
+          <li class="reveal">AI improves → companies cut headcount → savings buy more AI → repeat</li>
+          <li class="reveal">SaaS is being rebuilt in weeks by agents &mdash; mid-market renewals questioned</li>
+          <li class="reveal">Every moat built on human friction is going to zero</li>
+          <li class="reveal">The people who can <em>direct</em> agents effectively are the last to be displaced</li>
+          <li class="reveal">The skill isn't running more agents &mdash; it's knowing <em>which thread type for which task</em></li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal">
+        <div style="text-align:center;">
+          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Labor's share of GDP</div>
+          <div style="font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--rose);line-height:1;margin-top:8px;">64% → 46%</div>
+          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:4px;">1974 → 2028 scenario</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 22: WHAT TO BUILD ======== -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 40% 70%, var(--green-dim) 0%, transparent 45%);">
+    <div class="slide__inner" style="grid-template-columns:1fr;">
+      <div>
+        <p class="slide__label reveal" style="color:var(--green);">For the OpenClaw Community</p>
+        <h2 class="slide__heading reveal">Where to Start</h2>
+        <div class="card-grid">
+          <div class="mini-card reveal">
+            <h4 style="color:var(--accent);">1. Master Pi</h4>
+            <p>4 tools + extensions + skills. Learn the minimal core before adding complexity. Read Mario's blog.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--green);">2. Build CLI Tools</h4>
+            <p>225-token READMEs. Not MCP servers. Agent reads the docs, invokes via bash. Composable, cheap.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--amber);">3. Pre-Compute State</h4>
+            <p>Run <code>git diff</code>, <code>lsp</code>, <code>tests</code> BEFORE the agent touches anything. Zero exploration waste.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--rose);">4. Deterministic Gates</h4>
+            <p>Lint, format, test, commit &mdash; these steps don't hallucinate, don't cost tokens, don't break.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--teal);">5. Connect to OpenClaw</h4>
+            <p>Pi's SDK powers OpenClaw. Your extensions work in both. One agent, everywhere.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--text-dim);">6. Measure, Don't Vibe</h4>
+            <p>Track cost per PR, CI pass rate, tool calls per thread. If you can't measure it, you can't improve it.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== SLIDE 23: CLOSING QUOTE ======== -->
+  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--accent-dim) 0%, transparent 35%);">
+    <div class="slide__quote-mark reveal">&ldquo;</div>
+    <blockquote class="reveal">The canary is still alive.<br>We still have time to be proactive.</blockquote>
+    <cite class="reveal">&mdash; Citrini Research, Feb 2026</cite>
+  </section>
+
+  <!-- ======== SLIDE 24: FINAL ======== -->
+  <section class="slide slide--bleed">
+    <div class="slide__bg slide__bg--grad1"></div>
+    <div class="slide__scrim"></div>
+    <div class="slide__content">
+      <p class="slide__label reveal" style="color:rgba(255,255,255,0.5);">Links &amp; Resources</p>
+      <h2 class="slide__heading reveal">Let's Build Together</h2>
+      <ul class="slide__bullets reveal" style="margin-top:16px;">
+        <li style="color:rgba(255,255,255,0.7);">Pi: <code style="color:var(--accent);">github.com/badlogic/pi-mono</code></li>
+        <li style="color:rgba(255,255,255,0.7);">OpenClaw: <code style="color:var(--accent);">openclaw.ai</code></li>
+        <li style="color:rgba(255,255,255,0.7);">Mario's blog: <code style="color:var(--accent);">mariozechner.at</code></li>
+        <li style="color:rgba(255,255,255,0.7);">Armin on Pi: <code style="color:var(--accent);">lucumr.pocoo.org/2026/1/31/pi/</code></li>
+        <li style="color:rgba(255,255,255,0.7);">Peter's OpenClaw: <code style="color:var(--accent);">steipete.me</code></li>
+      </ul>
+    </div>
+  </section>
+
+</div><!-- /deck -->
+
+<script>
+  function SlideEngine(){this.deck=document.querySelector('.deck');this.slides=[].slice.call(document.querySelectorAll('.slide'));this.current=0;this.total=this.slides.length;this.buildChrome();this.bindEvents();this.observe();this.update();}
+  SlideEngine.prototype.buildChrome=function(){var bar=document.createElement('div');bar.className='deck-progress';document.body.appendChild(bar);this.bar=bar;var dots=document.createElement('div');dots.className='deck-dots';var self=this;this.slides.forEach(function(_,i){var d=document.createElement('button');d.className='deck-dot';d.title='Slide '+(i+1);d.onclick=function(){self.goTo(i);};dots.appendChild(d);});document.body.appendChild(dots);this.dots=[].slice.call(dots.children);var ctr=document.createElement('div');ctr.className='deck-counter';document.body.appendChild(ctr);this.counter=ctr;var hints=document.createElement('div');hints.className='deck-hints';hints.textContent='\u2190 \u2192 or scroll to navigate';document.body.appendChild(hints);this.hints=hints;this.hintTimer=setTimeout(function(){hints.classList.add('faded');},4000);};
+  SlideEngine.prototype.bindEvents=function(){var self=this;document.addEventListener('keydown',function(e){if(e.target.closest('input,textarea,[contenteditable]'))return;if(['ArrowDown','ArrowRight',' ','PageDown'].indexOf(e.key)>-1){e.preventDefault();self.next();}else if(['ArrowUp','ArrowLeft','PageUp'].indexOf(e.key)>-1){e.preventDefault();self.prev();}else if(e.key==='Home'){e.preventDefault();self.goTo(0);}else if(e.key==='End'){e.preventDefault();self.goTo(self.total-1);}self.fadeHints();});var tY;this.deck.addEventListener('touchstart',function(e){tY=e.touches[0].clientY;},{passive:true});this.deck.addEventListener('touchend',function(e){var dy=tY-e.changedTouches[0].clientY;if(Math.abs(dy)>50){dy>0?self.next():self.prev();}});};
+  SlideEngine.prototype.observe=function(){var self=this;var obs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add('visible');self.current=self.slides.indexOf(entry.target);self.update();}});},{threshold:0.5});this.slides.forEach(function(s){obs.observe(s);});};
+  SlideEngine.prototype.goTo=function(i){this.slides[Math.max(0,Math.min(i,this.total-1))].scrollIntoView({behavior:'smooth'});};
+  SlideEngine.prototype.next=function(){if(this.current<this.total-1)this.goTo(this.current+1);};
+  SlideEngine.prototype.prev=function(){if(this.current>0)this.goTo(this.current-1);};
+  SlideEngine.prototype.update=function(){this.bar.style.width=((this.current+1)/this.total*100)+'%';var c=this.current;this.dots.forEach(function(d,i){d.classList.toggle('active',i===c);});this.counter.textContent=(this.current+1)+' / '+this.total;};
+  SlideEngine.prototype.fadeHints=function(){clearTimeout(this.hintTimer);this.hints.classList.add('faded');};
+  new SlideEngine();
+</script>
+
+</body>
+</html>
