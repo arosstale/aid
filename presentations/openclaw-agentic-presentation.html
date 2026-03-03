@@ -205,10 +205,11 @@
   </section>
 
   <!-- ======== SLIDE 2: THE THESIS ======== -->
-  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--accent-dim) 0%, transparent 35%);">
-    <div class="slide__quote-mark reveal">&ldquo;</div>
-    <blockquote class="reveal">Prompts are code,<br>.json and .md files are state.</blockquote>
-    <cite class="reveal">&mdash; Mario Zechner, Pi Creator</cite>
+  <section class="slide slide--quote" style="background-image:url('img/05-thesis.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.7);z-index:0;"></div>
+    <div class="slide__quote-mark reveal" style="position:relative;z-index:1;">&ldquo;</div>
+    <blockquote class="reveal" style="position:relative;z-index:1;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.4);">Prompts are code,<br>.json and .md files are state.</blockquote>
+    <cite class="reveal" style="position:relative;z-index:1;">&mdash; Mario Zechner, Pi Creator</cite>
   </section>
 
   <!-- ======== SLIDE 3: DIVIDER ======== -->
@@ -242,8 +243,9 @@
   </section>
 
   <!-- ======== SLIDE 5: WHY NO MCP ======== -->
-  <section class="slide slide--split">
-    <div class="slide__panels">
+  <section class="slide slide--split" style="background-image:url('img/06-mcp-vs-cli.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.8);z-index:0;"></div>
+    <div class="slide__panels" style="position:relative;z-index:1;">
       <div class="slide__panel slide__panel--primary">
         <p class="slide__label reveal" style="color:var(--red);">MCP Servers</p>
         <h2 class="slide__heading reveal" style="font-size:clamp(22px,3.5vw,36px);">Token-Hungry</h2>
@@ -292,19 +294,7 @@
         </ul>
       </div>
       <div class="slide__aside reveal">
-        <svg viewBox="0 0 200 160" width="200" height="160">
-          <rect x="40" y="10" width="120" height="40" rx="8" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1.5"/>
-          <text x="100" y="35" text-anchor="middle" font-family="var(--font-mono)" font-size="13" fill="var(--accent)" font-weight="600">pi-ai</text>
-          <rect x="40" y="65" width="120" height="40" rx="8" fill="var(--teal-dim)" stroke="var(--teal)" stroke-width="1.5"/>
-          <text x="100" y="90" text-anchor="middle" font-family="var(--font-mono)" font-size="13" fill="var(--teal)" font-weight="600">pi-coding-agent</text>
-          <rect x="10" y="120" width="85" height="32" rx="6" fill="var(--green-dim)" stroke="var(--green)" stroke-width="1"/>
-          <text x="52" y="140" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--green)">OpenClaw</text>
-          <rect x="105" y="120" width="85" height="32" rx="6" fill="var(--amber-dim)" stroke="var(--amber)" stroke-width="1"/>
-          <text x="147" y="140" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="var(--amber)">Your CLI</text>
-          <line x1="100" y1="50" x2="100" y2="65" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
-          <line x1="55" y1="105" x2="55" y2="120" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
-          <line x1="145" y1="105" x2="145" y2="120" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
-        </svg>
+        <img src="img/07-evolution.png" alt="Pi evolution layers" style="max-width:100%;max-height:300px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       </div>
     </div>
   </section>
@@ -338,10 +328,11 @@
   </section>
 
   <!-- ======== SLIDE 10: DASHBOARD ======== -->
-  <section class="slide slide--dashboard" style="background-image:radial-gradient(ellipse at 70% 30%, var(--accent-dim) 0%, transparent 40%);">
-    <p class="slide__label reveal">Why Multi-CLI Matters</p>
-    <h2 class="slide__heading reveal">Three Kinds of Agnostic</h2>
-    <div class="slide__kpis" style="margin-top:clamp(12px,2vh,24px);">
+  <section class="slide slide--dashboard" style="background-image:url('img/08-agnostic.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.75);z-index:0;"></div>
+    <p class="slide__label reveal" style="position:relative;z-index:1;">Why Multi-CLI Matters</p>
+    <h2 class="slide__heading reveal" style="position:relative;z-index:1;">Three Kinds of Agnostic</h2>
+    <div class="slide__kpis" style="margin-top:clamp(12px,2vh,24px);position:relative;z-index:1;">
       <div class="slide__kpi reveal">
         <div class="slide__kpi-val" style="color:var(--accent);">Model</div>
         <div class="slide__kpi-label">Agnostic</div>
@@ -410,10 +401,7 @@
         </ul>
       </div>
       <div class="slide__aside reveal">
-        <div style="text-align:center;">
-          <div style="font-size:clamp(48px,8vw,72px);font-weight:800;color:var(--amber);line-height:1;">10×</div>
-          <div style="font-family:var(--font-mono);font-size:12px;color:var(--text-dim);margin-top:8px;text-transform:uppercase;letter-spacing:1px;">Faster</div>
-        </div>
+        <img src="img/09-spine-proof.png" alt="10x faster with agents" style="max-width:100%;max-height:300px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       </div>
     </div>
   </section>
@@ -470,9 +458,10 @@
   </section>
 
   <!-- ======== SLIDE 17: DIVIDER ======== -->
-  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 60% 50%, var(--teal-dim) 0%, transparent 40%);">
-    <span class="slide__number">06</span>
-    <div>
+  <section class="slide slide--divider" style="background-image:url('img/10-overstory.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.7);z-index:0;"></div>
+    <span class="slide__number" style="z-index:1;">06</span>
+    <div style="position:relative;z-index:1;">
       <h2 class="slide__heading reveal">Prior Art: Overstory</h2>
       <p class="slide__subtitle reveal" style="margin-top:12px;">Someone already shipped this</p>
     </div>
@@ -512,9 +501,10 @@
   </section>
 
   <!-- ======== SLIDE 18: WHAT WORKS / WHAT DOESN'T ======== -->
-  <section class="slide slide--split">
-    <div class="slide__panels">
-      <div class="slide__panel slide__panel--primary">
+  <section class="slide slide--split" style="background-image:url('img/11-works-vs-not.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.82);z-index:0;"></div>
+    <div class="slide__panels" style="position:relative;z-index:1;">
+      <div class="slide__panel slide__panel--primary" style="background:rgba(20,27,40,0.9);">
         <p class="slide__label reveal" style="color:var(--green);">What Works</p>
         <ul class="slide__bullets" style="margin-top:8px;">
           <li class="reveal">Deterministic gates catch real bugs</li>
@@ -524,7 +514,7 @@
           <li class="reveal">Skills the agent wrote and maintains</li>
         </ul>
       </div>
-      <div class="slide__panel slide__panel--secondary">
+      <div class="slide__panel slide__panel--secondary" style="background:rgba(26,36,54,0.9);">
         <p class="slide__label reveal" style="color:var(--red);">What Doesn't</p>
         <ul class="slide__bullets" style="margin-top:8px;">
           <li class="reveal">Agent armies writing code unsupervised</li>
@@ -538,10 +528,11 @@
   </section>
 
   <!-- ======== SLIDE 19: QUOTE ======== -->
-  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--rose-dim) 0%, transparent 35%);">
-    <div class="slide__quote-mark reveal">&ldquo;</div>
-    <blockquote class="reveal">Nobody knows yet how to do this properly. We are all just throwing shit at the wall, declaring victory, while secretly crying over all the tech debt.</blockquote>
-    <cite class="reveal">&mdash; Mario Zechner, Year in Review 2025</cite>
+  <section class="slide slide--quote" style="background-image:url('img/12-mario-quote.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.72);z-index:0;"></div>
+    <div class="slide__quote-mark reveal" style="position:relative;z-index:1;">&ldquo;</div>
+    <blockquote class="reveal" style="position:relative;z-index:1;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.5);">Nobody knows yet how to do this properly. We are all just throwing shit at the wall, declaring victory, while secretly crying over all the tech debt.</blockquote>
+    <cite class="reveal" style="position:relative;z-index:1;">&mdash; Mario Zechner, Year in Review 2025</cite>
   </section>
 
   <!-- ======== SLIDE 20: DIVIDER ======== -->
@@ -568,18 +559,15 @@
         </ul>
       </div>
       <div class="slide__aside reveal">
-        <div style="text-align:center;">
-          <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;">Labor's share of GDP</div>
-          <div style="font-size:clamp(32px,5vw,48px);font-weight:800;color:var(--rose);line-height:1;margin-top:8px;">64% → 46%</div>
-          <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:4px;">1974 → 2028 scenario</div>
-        </div>
+        <img src="img/13-displacement.png" alt="Intelligence displacement spiral" style="max-width:100%;max-height:300px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);">
       </div>
     </div>
   </section>
 
   <!-- ======== SLIDE 22: WHAT TO BUILD ======== -->
-  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 40% 70%, var(--green-dim) 0%, transparent 45%);">
-    <div class="slide__inner" style="grid-template-columns:1fr;">
+  <section class="slide slide--content" style="background-image:url('img/14-stepping-stones.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.82);z-index:0;"></div>
+    <div class="slide__inner" style="grid-template-columns:1fr;position:relative;z-index:1;">
       <div>
         <p class="slide__label reveal" style="color:var(--green);">For the OpenClaw Community</p>
         <h2 class="slide__heading reveal">Where to Start</h2>
@@ -614,15 +602,16 @@
   </section>
 
   <!-- ======== SLIDE 23: CLOSING QUOTE ======== -->
-  <section class="slide slide--quote" style="background-image:radial-gradient(ellipse at 50% 50%, var(--accent-dim) 0%, transparent 35%);">
-    <div class="slide__quote-mark reveal">&ldquo;</div>
-    <blockquote class="reveal">The canary is still alive.<br>We still have time to be proactive.</blockquote>
-    <cite class="reveal">&mdash; Citrini Research, Feb 2026</cite>
+  <section class="slide slide--quote" style="background-image:url('img/15-canary.png');background-size:cover;background-position:center;">
+    <div style="position:absolute;inset:0;background:rgba(12,16,24,0.65);z-index:0;"></div>
+    <div class="slide__quote-mark reveal" style="position:relative;z-index:1;">&ldquo;</div>
+    <blockquote class="reveal" style="position:relative;z-index:1;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.5);">The canary is still alive.<br>We still have time to be proactive.</blockquote>
+    <cite class="reveal" style="position:relative;z-index:1;">&mdash; Citrini Research, Feb 2026</cite>
   </section>
 
   <!-- ======== SLIDE 24: FINAL ======== -->
   <section class="slide slide--bleed">
-    <div class="slide__bg slide__bg--grad1"></div>
+    <div class="slide__bg" style="background-image:url('img/16-terminal-final.png');background-size:cover;background-position:center;"></div>
     <div class="slide__scrim"></div>
     <div class="slide__content">
       <p class="slide__label reveal" style="color:rgba(255,255,255,0.5);">Links &amp; Resources</p>
