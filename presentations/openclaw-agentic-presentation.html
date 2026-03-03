@@ -201,7 +201,7 @@
     <svg class="slide__decor" style="bottom:0;left:0;z-index:1;" width="120" height="120" viewBox="0 0 120 120"><line x1="0" y1="80" x2="0" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/><line x1="0" y1="120" x2="40" y2="120" stroke="var(--accent)" stroke-width="2" opacity="0.15"/></svg>
     <div class="reveal" style="position:relative;z-index:1;"><p class="slide__subtitle" style="margin-bottom:clamp(16px,2vh,32px);color:rgba(255,255,255,0.7);">OpenClaw Community &mdash; March 2026</p></div>
     <h1 class="slide__display reveal" style="position:relative;z-index:1;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,0.5);">Agentic Engineering<br>with Pi &amp; OpenClaw</h1>
-    <div class="reveal" style="position:relative;z-index:1;"><p class="slide__subtitle" style="margin-top:clamp(16px,2vh,32px);color:rgba(255,255,255,0.7);">How I orchestrate 16 CLI agents into one workflow</p></div>
+    <div class="reveal" style="position:relative;z-index:1;"><p class="slide__subtitle" style="margin-top:clamp(16px,2vh,32px);color:rgba(255,255,255,0.7);">How I orchestrate 18 CLI agents into one workflow</p></div>
   </section>
 
   <!-- ======== SLIDE 2: THE THESIS ======== -->
@@ -314,20 +314,20 @@
     <span class="slide__number">03</span>
     <div>
       <h2 class="slide__heading reveal">My Setup</h2>
-      <p class="slide__subtitle reveal" style="margin-top:12px;">16 CLIs, one orchestration layer</p>
+      <p class="slide__subtitle reveal" style="margin-top:12px;">18 CLIs, one orchestration layer</p>
     </div>
   </section>
 
   <!-- ======== SLIDE 9: TOOL INVENTORY ======== -->
   <section class="slide slide--table">
     <p class="slide__label reveal">The Full Stack</p>
-    <h2 class="slide__heading reveal">16 CLIs Across Every Major Provider</h2>
+    <h2 class="slide__heading reveal">18 CLIs Across Every Major Provider</h2>
     <div class="table-wrap reveal" style="flex:1; min-height:0; margin-top:clamp(8px,1.5vh,20px);">
       <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>Layer</th><th>Tools</th><th>Role</th></tr></thead>
           <tbody>
-            <tr><td>Local Agents</td><td><code>pi</code> <code>claude</code> <code>gemini</code> <code>codex</code> <code>aider</code> <code>goose</code> <code>amp</code> <code>cursor</code></td><td>8 coding agents, any model, any provider</td></tr>
+            <tr><td>Local Agents</td><td><code>pi</code> <code>claude</code> <code>gemini-cli</code> <code>codex</code> <code>aider</code> <code>goose</code> <code>amp</code> <code>cursor</code> <code>antigravity</code> <code>gemini</code></td><td>10 coding agents, any model, any provider</td></tr>
             <tr><td>Remote Backends</td><td><code>gh agent-task</code> <code>jules-client.sh</code> <code>e2b</code></td><td>Cloud sandboxes &mdash; fire-and-forget builds</td></tr>
             <tr><td>Platform</td><td><code>OpenClaw</code></td><td>Pi as a personal agent connected to chat</td></tr>
             <tr><td>Tool CLIs</td><td><code>docker</code> <code>gh</code> <code>beepctl</code> <code>pi-messenger</code></td><td>Infrastructure + coordination</td></tr>
@@ -350,7 +350,7 @@
       <div class="slide__kpi reveal">
         <div class="slide__kpi-val" style="color:var(--green);">Tool</div>
         <div class="slide__kpi-label">Agnostic</div>
-        <div class="slide__kpi-trend" style="color:var(--text-dim);">Cursor dies? 7 agents remain.</div>
+        <div class="slide__kpi-trend" style="color:var(--text-dim);">Cursor dies? 9 agents remain.</div>
       </div>
       <div class="slide__kpi reveal">
         <div class="slide__kpi-val" style="color:var(--amber);">Cost</div>
