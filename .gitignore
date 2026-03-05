@@ -12,3 +12,4 @@ nul
 # Pi internal state
 .pi/messenger/
 .pi/cleanup-plan.json
+remotion/node_modules/

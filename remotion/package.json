@@ -1,0 +1,16 @@
+{
+  "name": "presentation-video",
+  "version": "1.0.0",
+  "description": "Remotion renderer for OpenClaw agentic engineering presentation",
+  "type": "module",
+  "scripts": {
+    "preview": "remotion preview src/Root.jsx",
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.431",
+    "@remotion/cli": "^4.0.431",
+    "@remotion/renderer": "^4.0.431",
+    "remotion": "^4.0.431"
+  }
+}
