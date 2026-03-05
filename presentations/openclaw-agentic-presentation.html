@@ -578,6 +578,103 @@
     </div>
   </section>
 
+  <!-- ======== DEV ENVIRONMENT CLUSTER ======== -->
+
+  <!-- SLIDE: Dev Env Overview -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 50% 60%, var(--green-dim) 0%, transparent 40%);">
+    <span class="slide__number">DE</span>
+    <div class="slide__content">
+      <p class="slide__label reveal" style="color:var(--green);">Where This Actually Runs</p>
+      <h2 class="slide__heading reveal">Dev Environment</h2>
+      <ul class="slide__bullets reveal" style="margin-top:24px;">
+        <li><strong style="color:var(--green);">tmux + mprocs</strong> everywhere &mdash; bare Linux, WSL, cloud boxes</li>
+        <li><strong style="color:var(--amber);">psmux</strong> when you stay in native PowerShell (no WSL)</li>
+        <li>One muscle memory, any OS &mdash; same thread model throughout</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SLIDE: Linux / WSL -->
+  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 30% 70%, var(--green-dim) 0%, transparent 50%);">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--green);">Linux &amp; WSL</p>
+        <h2 class="slide__heading reveal">tmux + mprocs</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><code>apt install tmux</code> &mdash; auto-start via <code>tmux new-session -A -s main</code> in your shell profile</li>
+          <li><code>mprocs</code> inside a tmux pane &mdash; one <code>mprocs.yaml</code> per project for servers, watchers, agents</li>
+          <li>WSL: Windows Terminal auto-launches tmux &mdash; detach survives tab close</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--green);line-height:1.8;">
+        <div class="reveal">
+          <span style="color:var(--text-dim);"># mprocs.yaml</span><br>
+          procs:<br>
+          &nbsp;&nbsp;server: npm run dev<br>
+          &nbsp;&nbsp;watch: bun --watch test<br>
+          &nbsp;&nbsp;agent: pi
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: Windows -->
+  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 70% 30%, var(--amber-dim) 0%, transparent 50%);">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--amber);">Windows (no WSL)</p>
+        <h2 class="slide__heading reveal">psmux + mprocs</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><strong style="color:var(--amber);">psmux</strong> &mdash; tmux drop-in for PowerShell: sessions, panes, detach/reattach</li>
+          <li><code>scoop install mprocs</code> &mdash; same <code>mprocs.yaml</code>, same workflow as Linux</li>
+          <li>GUI tools connect to WSL when you need Linux paths; psmux stays native</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--amber);line-height:1.8;">
+        <div class="reveal">
+          <span style="color:var(--text-dim);"># PowerShell</span><br>
+          psmux<br>
+          tmux new-session -s work<br>
+          mprocs
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: Mental Model -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 50% 50%, var(--teal-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div class="slide__text">
+        <p class="slide__label reveal" style="color:var(--teal);">Mental Model</p>
+        <h2 class="slide__heading reveal">Two Layers, Any OS</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><strong style="color:var(--green);">tmux / psmux</strong> &rarr; workspace layer (sessions, panes, persistence)</li>
+          <li><strong style="color:var(--accent);">mprocs</strong> &rarr; project orchestrator inside each pane (<code>mprocs.yaml</code>)</li>
+          <li><strong style="color:var(--rose);">pi / claude / codex</strong> &rarr; agent layer running inside mprocs</li>
+        </ul>
+      </div>
+      <div class="slide__aside reveal" style="display:flex;flex-direction:column;gap:12px;font-family:var(--font-mono);font-size:clamp(11px,1.2vw,14px);">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--green);font-weight:600;margin-bottom:4px;">WORKSPACE</div>
+          <div style="color:var(--text-dim);">tmux / psmux</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Sessions &bull; Panes &bull; Detach</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--accent);font-weight:600;margin-bottom:4px;">ORCHESTRATION</div>
+          <div style="color:var(--text-dim);">mprocs (mprocs.yaml)</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Servers &bull; Watchers &bull; Agents</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--rose);font-weight:600;margin-bottom:4px;">AGENTS</div>
+          <div style="color:var(--text-dim);">pi / claude / codex</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Threads &bull; Sandboxes &bull; Tools</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ======== SLIDE 17: DIVIDER ======== -->
   <section class="slide slide--divider" style="background-image:url('img/10-overstory.png');background-size:cover;background-position:center;">
     <div style="position:absolute;inset:0;background:rgba(12,16,24,0.7);z-index:0;"></div>
@@ -698,16 +795,16 @@
             <p>4 tools + extensions + skills. Learn the minimal core before adding complexity. Read Mario's blog.</p>
           </div>
           <div class="mini-card reveal">
-            <h4 style="color:var(--green);">2. Build CLI Tools</h4>
+            <h4 style="color:var(--green);">2. Set Up Your Workspace</h4>
+            <p>tmux + mprocs on Linux/WSL, psmux + mprocs on Windows. One <code>mprocs.yaml</code> per project. This is step zero.</p>
+          </div>
+          <div class="mini-card reveal">
+            <h4 style="color:var(--amber);">3. Build CLI Tools</h4>
             <p>225-token READMEs. Not MCP servers. Agent reads the docs, invokes via bash. Composable, cheap.</p>
           </div>
           <div class="mini-card reveal">
-            <h4 style="color:var(--amber);">3. Pre-Compute State</h4>
-            <p>Run <code>git diff</code>, <code>lsp</code>, <code>tests</code> BEFORE the agent touches anything. Zero exploration waste.</p>
-          </div>
-          <div class="mini-card reveal">
-            <h4 style="color:var(--rose);">4. Deterministic Gates</h4>
-            <p>Lint, format, test, commit &mdash; these steps don't hallucinate, don't cost tokens, don't break.</p>
+            <h4 style="color:var(--rose);">4. Pre-Compute + Gates</h4>
+            <p>Run <code>git diff</code>, <code>lsp</code>, <code>tests</code> before the agent. Lint, format, commit after. Zero hallucination in [D] steps.</p>
           </div>
           <div class="mini-card reveal">
             <h4 style="color:var(--teal);">5. Connect to OpenClaw</h4>
@@ -717,125 +814,6 @@
             <h4 style="color:var(--text-dim);">6. Measure, Don't Vibe</h4>
             <p>Track cost per PR, CI pass rate, tool calls per thread. If you can't measure it, you can't improve it.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======== DEV ENVIRONMENT CLUSTER ======== -->
-
-  <!-- SLIDE: Dev Env Summary -->
-  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 50% 60%, var(--green-dim) 0%, transparent 40%);">
-    <span class="slide__number">DE</span>
-    <div class="slide__content">
-      <p class="slide__label reveal" style="color:var(--green);">Recommended Pattern</p>
-      <h2 class="slide__heading reveal">Linux + Windows Agentic Dev Environment</h2>
-      <ul class="slide__bullets reveal" style="margin-top:24px;">
-        <li>Run <strong style="color:var(--green);">tmux + mprocs</strong> everywhere &mdash; bare Linux, WSL, and cloud boxes</li>
-        <li>Add <strong style="color:var(--amber);">psmux</strong> only when you need tmux-style panes in native PowerShell (no WSL)</li>
-        <li>Same thread/sandbox model across all environments &mdash; one muscle memory</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- SLIDE: Linux / WSL Detail -->
-  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 30% 70%, var(--green-dim) 0%, transparent 50%);">
-    <div class="slide__panels">
-      <div class="slide__panel slide__panel--primary">
-        <p class="slide__label reveal" style="color:var(--green);">On Linux (bare metal or WSL)</p>
-        <h2 class="slide__heading reveal">tmux + mprocs</h2>
-        <ul class="slide__bullets reveal" style="margin-top:16px;">
-          <li><code>sudo apt install tmux</code> &mdash; optional <code>gpakosz/.tmux</code> for sane defaults</li>
-          <li>Auto-start in WSL: Windows Terminal profile &rarr; <code style="font-size:0.85em;">wsl.exe -d Ubuntu tmux new-session -A -s main</code></li>
-          <li>Install <code>mprocs</code> (binary or <code>npm i -g mprocs</code>), define <code>mprocs.yaml</code> per project</li>
-          <li>Run mprocs <em>inside</em> a tmux pane &mdash; dev servers, watchers, pi agents all in one view</li>
-        </ul>
-      </div>
-      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--green);line-height:1.8;">
-        <div class="reveal">
-          <span style="color:var(--text-dim);"># ~/.bashrc or WSL profile</span><br>
-          <span style="color:var(--amber);">if</span> [ -z "$TMUX" ]; <span style="color:var(--amber);">then</span><br>
-          &nbsp;&nbsp;tmux new-session -A -s main<br>
-          <span style="color:var(--amber);">fi</span>
-        </div>
-        <div class="reveal" style="margin-top:12px;">
-          <span style="color:var(--text-dim);"># mprocs.yaml</span><br>
-          procs:<br>
-          &nbsp;&nbsp;server: npm run dev<br>
-          &nbsp;&nbsp;watch: bun --watch test<br>
-          &nbsp;&nbsp;agent: pi
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE: Windows Detail -->
-  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 70% 30%, var(--amber-dim) 0%, transparent 50%);">
-    <div class="slide__panels">
-      <div class="slide__panel slide__panel--primary">
-        <p class="slide__label reveal" style="color:var(--amber);">On Windows (outside WSL)</p>
-        <h2 class="slide__heading reveal">psmux + mprocs</h2>
-        <ul class="slide__bullets reveal" style="margin-top:16px;">
-          <li><strong style="color:var(--amber);">psmux</strong> gives tmux UX in PowerShell &mdash; sessions, panes, detach/reattach</li>
-          <li>Install <code>mprocs</code> via <code>scoop install mprocs</code> or <code>npm i -g mprocs</code></li>
-          <li>Run mprocs in a psmux pane &mdash; exact same <code>mprocs.yaml</code> as Linux</li>
-          <li>For VS Code &amp; GUI tools, connect to <strong>WSL</strong> when you need Linux paths</li>
-        </ul>
-      </div>
-      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--amber);line-height:1.8;">
-        <div class="reveal">
-          <span style="color:var(--text-dim);"># PowerShell</span><br>
-          psmux<br>
-          tmux new-session -s work<br>
-          <span style="color:var(--text-dim);"># Ctrl-b %&nbsp; &rarr; split pane</span><br>
-          <span style="color:var(--text-dim);"># Ctrl-b d&nbsp; &rarr; detach</span>
-        </div>
-        <div class="reveal" style="margin-top:12px;">
-          <span style="color:var(--text-dim);"># Same mprocs.yaml works</span><br>
-          scoop install mprocs<br>
-          mprocs
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLIDE: Mental Model -->
-  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 50% 50%, var(--teal-dim) 0%, transparent 45%);">
-    <div class="slide__inner">
-      <div class="slide__text">
-        <p class="slide__label reveal" style="color:var(--teal);">Mental Model</p>
-        <h2 class="slide__heading reveal">Two Layers, Any OS</h2>
-        <ul class="slide__bullets reveal" style="margin-top:16px;">
-          <li><strong style="color:var(--green);">tmux</strong> in Linux/WSL &rarr; long-lived workspace layer (sessions, panes, SSH, remote boxes)</li>
-          <li><strong style="color:var(--amber);">psmux</strong> on Windows &rarr; tmux UX when you stay in PowerShell/cmd (no WSL needed)</li>
-          <li><strong style="color:var(--accent);">mprocs</strong> &rarr; project-local process orchestrator inside tmux/psmux, driven by <code>mprocs.yaml</code></li>
-        </ul>
-        <div class="reveal" style="margin-top:24px;padding:16px 20px;background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;">
-          <p style="font-size:clamp(13px,1.6vw,18px);color:var(--text-dim);line-height:1.6;">
-            <strong style="color:var(--text);">Map to threads:</strong>
-            Each tmux pane = one <span style="color:var(--green);">P-thread</span>.
-            mprocs = the <span style="color:var(--accent);">process manager</span> inside each pane.
-            Same muscle memory on Linux, WSL, and Windows.
-          </p>
-        </div>
-      </div>
-      <div class="slide__aside reveal" style="display:flex;flex-direction:column;gap:12px;font-family:var(--font-mono);font-size:clamp(11px,1.2vw,14px);">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
-          <div style="color:var(--green);font-weight:600;margin-bottom:4px;">WORKSPACE LAYER</div>
-          <div style="color:var(--text-dim);">tmux / psmux</div>
-          <div style="color:var(--text-dim);font-size:0.9em;">Sessions &bull; Panes &bull; Detach</div>
-        </div>
-        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
-          <div style="color:var(--accent);font-weight:600;margin-bottom:4px;">ORCHESTRATION LAYER</div>
-          <div style="color:var(--text-dim);">mprocs (mprocs.yaml)</div>
-          <div style="color:var(--text-dim);font-size:0.9em;">Servers &bull; Watchers &bull; Agents</div>
-        </div>
-        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
-          <div style="color:var(--rose);font-weight:600;margin-bottom:4px;">AGENT LAYER</div>
-          <div style="color:var(--text-dim);">pi / claude / codex</div>
-          <div style="color:var(--text-dim);font-size:0.9em;">Threads &bull; Sandboxes &bull; Tools</div>
         </div>
       </div>
     </div>
