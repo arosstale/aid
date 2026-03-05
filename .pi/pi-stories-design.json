@@ -1,0 +1,114 @@
+{
+  "title": "pi-stories — Design Decisions",
+  "description": "Before I build, let me validate the key decisions. I've studied Overstory's 32-command, 4-database architecture and I know where they're strong and where you can beat them.",
+  "questions": [
+    {
+      "id": "philosophy",
+      "type": "single",
+      "weight": "critical",
+      "question": "Core philosophy — what makes pi-stories fundamentally different from Overstory?",
+      "options": [
+        {
+          "label": "Blueprint Engine native — [D]/[N] interleaving is the core, not bolted on",
+          "code": { "code": "# Overstory: spawn agent, hope for the best\nov sling task-1 --capability builder\n\n# pi-stories: deterministic gates BUILT INTO the pipeline\npi-stories run task-1\n# [D] context.json -> [N] scout -> [D] lint -> [N] build -> [D] test -> [N] review -> [D] commit", "lang": "bash" }
+        },
+        {
+          "label": "Cost-first — every command shows token cost, auto-routes to cheapest model",
+          "code": { "code": "# Scout on Haiku ($0.001), build on Sonnet ($0.01), review on Opus ($0.10)\npi-stories run task-1 --budget $2.00\n# Auto-selects models per phase based on budget", "lang": "bash" }
+        },
+        {
+          "label": "Both — Blueprint Engine + cost routing as twin pillars",
+          "code": { "code": "pi-stories run task-1 --budget $2.00\n# [D] pre-compute -> [N] scout (haiku) -> [D] lint\n# -> [N] build (sonnet) -> [D] test -> [N] review (opus)\n# -> [D] commit -> cost report", "lang": "bash" }
+        }
+      ],
+      "recommended": "Both — Blueprint Engine + cost routing as twin pillars",
+      "conviction": "strong"
+    },
+    {
+      "id": "scope",
+      "type": "single",
+      "weight": "critical",
+      "question": "Scope — how big is v0.1?",
+      "options": [
+        {
+          "label": "Minimal — 5 commands: init, run, status, costs, doctor",
+          "code": { "code": "pi-stories init          # creates .pi-stories/ in project\npi-stories run <task>    # Blueprint Engine pipeline\npi-stories status        # what's running\npi-stories costs         # token/cost breakdown\npi-stories doctor        # health check", "lang": "bash" }
+        },
+        {
+          "label": "Medium — 10 commands: add mail, trace, replay, merge, dashboard",
+          "code": { "code": "# Core 5 + observability\npi-stories trace <run-id>\npi-stories replay <run-id>\npi-stories mail send/check\npi-stories merge\npi-stories dashboard", "lang": "bash" }
+        },
+        {
+          "label": "Full — match Overstory's 32 commands from day 1"
+        }
+      ],
+      "recommended": "Minimal — 5 commands: init, run, status, costs, doctor",
+      "conviction": "strong"
+    },
+    {
+      "id": "runtime",
+      "type": "single",
+      "question": "Runtime — what do we build with?",
+      "options": [
+        {
+          "label": "TypeScript + Bun (like Overstory — fast, bun:sqlite built-in)",
+          "code": { "code": "// Same stack as Overstory, beat them on architecture\nimport { Database } from 'bun:sqlite';\nimport { $ } from 'bun';", "lang": "typescript" }
+        },
+        {
+          "label": "TypeScript + Node (broader compatibility, npm native)",
+          "code": { "code": "// Node 22+ with built-in SQLite\nimport { DatabaseSync } from 'node:sqlite';\nimport { execSync } from 'child_process';", "lang": "typescript" }
+        },
+        {
+          "label": "Plain bash + jq (Mario's philosophy — zero dependencies)",
+          "code": { "code": "#!/usr/bin/env bash\n# pi-stories run\ncontext=$(git diff --name-only main..HEAD | jq -R -s 'split(\"\\n\")')\npi \"Read context.json and implement\" --model haiku", "lang": "bash" }
+        }
+      ],
+      "recommended": "TypeScript + Bun (like Overstory — fast, bun:sqlite built-in)",
+      "conviction": "slight"
+    },
+    {
+      "id": "agents",
+      "type": "single",
+      "question": "Agent dispatch — how do we spawn agents?",
+      "options": [
+        {
+          "label": "pi subagents (built-in, uses existing agent definitions)",
+          "code": { "code": "// Use pi's native subagent system\nsubagent({ agent: 'scout', task: '...' })\nsubagent({ agent: 'builder', task: '...' })", "lang": "typescript" }
+        },
+        {
+          "label": "interactive_shell dispatch (supports ANY CLI — pi, claude, codex, gemini)",
+          "code": { "code": "// Universal — works with all 18 CLIs\ninteractive_shell({ command: 'pi \"scout task\"', mode: 'dispatch' })\ninteractive_shell({ command: 'codex \"build task\"', mode: 'dispatch' })", "lang": "typescript" }
+        },
+        {
+          "label": "Direct CLI spawn via Bun.spawn (lowest level, most control)",
+          "code": { "code": "// Direct process spawn\nconst scout = Bun.spawn(['pi', '--prompt', task, '--model', 'haiku']);\nawait scout.exited;", "lang": "typescript" }
+        }
+      ],
+      "recommended": "Direct CLI spawn via Bun.spawn (lowest level, most control)",
+      "conviction": "slight"
+    },
+    {
+      "id": "publish",
+      "type": "single",
+      "question": "Where does it live?",
+      "options": [
+        { "label": "npm package: @artale/pi-stories (public, installable)" },
+        { "label": "GitHub repo: arosstale/pi-stories (public, clone to use)" },
+        { "label": "Pi skill in pi-doodlestein (private, your setup only)" }
+      ],
+      "recommended": "GitHub repo: arosstale/pi-stories (public, clone to use)"
+    },
+    {
+      "id": "name",
+      "type": "single",
+      "question": "Name confirmation",
+      "options": [
+        { "label": "pi-stories — stories like user stories, each run tells a story" },
+        { "label": "pi-forge — forging code through deterministic + non-deterministic steps" },
+        { "label": "pi-minions — from the Stripe Minions paper that inspired the architecture" },
+        { "label": "pi-conductor — orchestrating agents like a conductor" }
+      ],
+      "recommended": "pi-stories — stories like user stories, each run tells a story"
+    }
+  ]
+}

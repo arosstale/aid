@@ -189,9 +189,117 @@
     .slide--dashboard .slide__kpis { grid-template-columns:repeat(2,1fr); }
     .card-grid { grid-template-columns:1fr; }
   }
+
+  /* ═══════ ANIMATION SYSTEM ═══════ */
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes breathe { 0%,100%{transform:scale(1);opacity:.8} 50%{transform:scale(1.04);opacity:1} }
+  @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+  @keyframes gradient-shift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+  @keyframes fade-up { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+  @keyframes fade-right { from{opacity:0;transform:translateX(-15px)} to{opacity:1;transform:none} }
+  @keyframes glow-text { 0%,100%{text-shadow:0 0 10px currentColor} 50%{text-shadow:0 0 30px currentColor,0 0 60px currentColor} }
+  @keyframes particle-rise { 0%{transform:translateY(0) scale(0);opacity:0} 5%{opacity:.5;transform:translateY(0) scale(1)} 95%{opacity:.5} 100%{transform:translateY(-100vh) scale(.5);opacity:0} }
+  @keyframes pulse-ring { 0%{transform:scale(1);opacity:.25} 100%{transform:scale(2.2);opacity:0} }
+
+  /* Particles */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .particle{position:absolute;bottom:-5px;width:2px;height:2px;border-radius:50%;background:var(--accent);animation:particle-rise linear infinite}
+  .particle--lg{width:4px;height:4px;background:var(--teal)}
+  .particle--gold{width:3px;height:3px;background:var(--amber)}
+
+  /* Quote marks float */
+  .slide__quote-mark{animation:float 5s ease-in-out infinite}
+  /* Divider numbers glow */
+  .slide--divider .slide__number{animation:glow-text 4s ease-in-out infinite}
+
+  /* KPI entrance + hover + breathe */
+  .slide__kpi{transition:transform .3s ease,box-shadow .3s ease}
+  .slide__kpi:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 12px 40px rgba(0,0,0,.3)}
+  .slide.visible .slide__kpi{animation:fade-up .6s cubic-bezier(.16,1,.3,1) both}
+  .slide.visible .slide__kpi:nth-child(1){animation-delay:.15s}
+  .slide.visible .slide__kpi:nth-child(2){animation-delay:.3s}
+  .slide.visible .slide__kpi:nth-child(3){animation-delay:.45s}
+  .slide__kpi-val{animation:breathe 3s ease-in-out infinite}
+
+  /* Mini-card entrance + hover */
+  .mini-card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+  .mini-card:hover{transform:translateY(-5px);box-shadow:0 10px 35px rgba(0,0,0,.3);border-color:var(--border-bright)}
+  .slide.visible .mini-card{animation:fade-up .5s cubic-bezier(.16,1,.3,1) both}
+  .slide.visible .mini-card:nth-child(1){animation-delay:.1s}
+  .slide.visible .mini-card:nth-child(2){animation-delay:.18s}
+  .slide.visible .mini-card:nth-child(3){animation-delay:.26s}
+  .slide.visible .mini-card:nth-child(4){animation-delay:.34s}
+  .slide.visible .mini-card:nth-child(5){animation-delay:.42s}
+  .slide.visible .mini-card:nth-child(6){animation-delay:.50s}
+
+  /* Table rows slide in */
+  .data-table tbody tr{opacity:0;transform:translateX(-12px);transition:opacity .4s ease,transform .4s ease}
+  .slide.visible .data-table tbody tr{opacity:1;transform:none}
+  .slide.visible .data-table tbody tr:nth-child(1){transition-delay:.15s}
+  .slide.visible .data-table tbody tr:nth-child(2){transition-delay:.25s}
+  .slide.visible .data-table tbody tr:nth-child(3){transition-delay:.35s}
+  .slide.visible .data-table tbody tr:nth-child(4){transition-delay:.45s}
+  .slide.visible .data-table tbody tr:nth-child(5){transition-delay:.55s}
+  .slide.visible .data-table tbody tr:nth-child(6){transition-delay:.65s}
+
+  /* Image aside parallax on reveal */
+  .slide__aside img{transition:transform 1s cubic-bezier(.16,1,.3,1),filter 1s ease;filter:brightness(.7)}
+  .slide.visible .slide__aside img{transform:scale(1.03);filter:brightness(1)}
+
+  /* Code block animated border glow */
+  .slide__code-block::before{content:'';position:absolute;inset:-2px;border-radius:13px;z-index:-1;opacity:0;background:linear-gradient(135deg,var(--accent),var(--green),var(--amber),var(--accent));background-size:300% 300%;animation:gradient-shift 4s ease infinite;transition:opacity .6s ease}
+  .slide.visible .slide__code-block::before{opacity:.25}
+
+  /* Split panels slide in from sides */
+  .slide--split .slide__panel--primary{opacity:0;transform:translateX(-30px);transition:opacity .6s ease .1s,transform .6s cubic-bezier(.16,1,.3,1) .1s}
+  .slide--split .slide__panel--secondary{opacity:0;transform:translateX(30px);transition:opacity .6s ease .3s,transform .6s cubic-bezier(.16,1,.3,1) .3s}
+  .slide--split.visible .slide__panel--primary,.slide--split.visible .slide__panel--secondary{opacity:1;transform:none}
+
+  /* --- Flow Diagram --- */
+  .flow-diagram{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:0}
+  .flow-step{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .flow-node{padding:clamp(8px,1.2vh,14px) clamp(10px,1.5vw,20px);border-radius:8px;font-family:var(--font-mono);font-size:clamp(11px,1.2vw,14px);font-weight:600;white-space:nowrap;transition:transform .3s ease,box-shadow .3s ease}
+  .flow-node:hover{transform:scale(1.1)}
+  .flow-node--d{background:var(--green-dim);border:1.5px solid var(--green);color:var(--green)}
+  .flow-node--d:hover{box-shadow:0 0 20px rgba(52,211,153,.3)}
+  .flow-node--n{background:var(--accent-dim);border:1.5px solid var(--accent);color:var(--accent)}
+  .flow-node--n:hover{box-shadow:0 0 20px rgba(56,189,248,.3)}
+  .flow-tag{font-family:var(--font-mono);font-size:9px;font-weight:700;color:var(--text-dim);letter-spacing:1px}
+  .flow-sep{font-size:clamp(14px,1.8vw,22px);color:var(--text-dim);padding:0 clamp(4px,.8vw,10px);flex-shrink:0;margin-bottom:16px}
+  .flow-diagram>*{opacity:0;transform:translateX(-12px);transition:opacity .35s ease,transform .35s ease}
+  .slide.visible .flow-diagram>*{opacity:1;transform:none}
+  .slide.visible .flow-diagram>:nth-child(1){transition-delay:.35s}
+  .slide.visible .flow-diagram>:nth-child(2){transition-delay:.50s}
+  .slide.visible .flow-diagram>:nth-child(3){transition-delay:.65s}
+  .slide.visible .flow-diagram>:nth-child(4){transition-delay:.80s}
+  .slide.visible .flow-diagram>:nth-child(5){transition-delay:.95s}
+  .slide.visible .flow-diagram>:nth-child(6){transition-delay:1.10s}
+  .slide.visible .flow-diagram>:nth-child(7){transition-delay:1.25s}
+  .slide.visible .flow-diagram>:nth-child(8){transition-delay:1.40s}
+  .slide.visible .flow-diagram>:nth-child(9){transition-delay:1.55s}
+  @media(max-width:768px){.flow-diagram{gap:2px}.flow-sep{padding:0 2px;font-size:12px}.flow-node{padding:6px 8px;font-size:10px}}
+
+  @media(prefers-reduced-motion:reduce){.particles,.particle{display:none!important}}
 </style>
 </head>
 <body>
+
+<!-- Ambient particles -->
+<div class="particles" aria-hidden="true">
+  <span class="particle" style="left:5%;animation-duration:18s;animation-delay:0s"></span>
+  <span class="particle" style="left:14%;animation-duration:22s;animation-delay:4s"></span>
+  <span class="particle" style="left:22%;animation-duration:16s;animation-delay:1s"></span>
+  <span class="particle particle--gold" style="left:30%;animation-duration:20s;animation-delay:6s"></span>
+  <span class="particle" style="left:40%;animation-duration:24s;animation-delay:2s"></span>
+  <span class="particle particle--lg" style="left:50%;animation-duration:19s;animation-delay:8s"></span>
+  <span class="particle" style="left:58%;animation-duration:21s;animation-delay:3s"></span>
+  <span class="particle particle--gold" style="left:68%;animation-duration:17s;animation-delay:7s"></span>
+  <span class="particle" style="left:78%;animation-duration:23s;animation-delay:5s"></span>
+  <span class="particle particle--lg" style="left:88%;animation-duration:18s;animation-delay:9s"></span>
+  <span class="particle" style="left:95%;animation-duration:25s;animation-delay:2s"></span>
+  <span class="particle particle--lg" style="left:35%;animation-duration:28s;animation-delay:11s"></span>
+  <span class="particle particle--gold" style="left:72%;animation-duration:22s;animation-delay:14s"></span>
+</div>
 
 <div class="deck">
 
@@ -383,6 +491,18 @@
 
 <span class="cm"># [D] Ship it</span>
 <span class="hl">gh pr create</span> --fill</code></pre>
+    </div>
+    <!-- Animated Flow Diagram -->
+    <div class="flow-diagram" style="margin-top:clamp(16px,2vh,24px);max-width:900px;width:100%;">
+      <div class="flow-step"><div class="flow-node flow-node--d">Pre-compute</div><div class="flow-tag">[D]</div></div>
+      <div class="flow-sep">→</div>
+      <div class="flow-step"><div class="flow-node flow-node--n">Agent</div><div class="flow-tag">[N]</div></div>
+      <div class="flow-sep">→</div>
+      <div class="flow-step"><div class="flow-node flow-node--d">Quality Gate</div><div class="flow-tag">[D]</div></div>
+      <div class="flow-sep">→</div>
+      <div class="flow-step"><div class="flow-node flow-node--n">Review</div><div class="flow-tag">[N]</div></div>
+      <div class="flow-sep">→</div>
+      <div class="flow-step"><div class="flow-node flow-node--d">Ship</div><div class="flow-tag">[D]</div></div>
     </div>
   </section>
 
@@ -597,6 +717,125 @@
             <h4 style="color:var(--text-dim);">6. Measure, Don't Vibe</h4>
             <p>Track cost per PR, CI pass rate, tool calls per thread. If you can't measure it, you can't improve it.</p>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== DEV ENVIRONMENT CLUSTER ======== -->
+
+  <!-- SLIDE: Dev Env Summary -->
+  <section class="slide slide--divider" style="background-image:radial-gradient(ellipse at 50% 60%, var(--green-dim) 0%, transparent 40%);">
+    <span class="slide__number">DE</span>
+    <div class="slide__content">
+      <p class="slide__label reveal" style="color:var(--green);">Recommended Pattern</p>
+      <h2 class="slide__heading reveal">Linux + Windows Agentic Dev Environment</h2>
+      <ul class="slide__bullets reveal" style="margin-top:24px;">
+        <li>Run <strong style="color:var(--green);">tmux + mprocs</strong> everywhere &mdash; bare Linux, WSL, and cloud boxes</li>
+        <li>Add <strong style="color:var(--amber);">psmux</strong> only when you need tmux-style panes in native PowerShell (no WSL)</li>
+        <li>Same thread/sandbox model across all environments &mdash; one muscle memory</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SLIDE: Linux / WSL Detail -->
+  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 30% 70%, var(--green-dim) 0%, transparent 50%);">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--green);">On Linux (bare metal or WSL)</p>
+        <h2 class="slide__heading reveal">tmux + mprocs</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><code>sudo apt install tmux</code> &mdash; optional <code>gpakosz/.tmux</code> for sane defaults</li>
+          <li>Auto-start in WSL: Windows Terminal profile &rarr; <code style="font-size:0.85em;">wsl.exe -d Ubuntu tmux new-session -A -s main</code></li>
+          <li>Install <code>mprocs</code> (binary or <code>npm i -g mprocs</code>), define <code>mprocs.yaml</code> per project</li>
+          <li>Run mprocs <em>inside</em> a tmux pane &mdash; dev servers, watchers, pi agents all in one view</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--green);line-height:1.8;">
+        <div class="reveal">
+          <span style="color:var(--text-dim);"># ~/.bashrc or WSL profile</span><br>
+          <span style="color:var(--amber);">if</span> [ -z "$TMUX" ]; <span style="color:var(--amber);">then</span><br>
+          &nbsp;&nbsp;tmux new-session -A -s main<br>
+          <span style="color:var(--amber);">fi</span>
+        </div>
+        <div class="reveal" style="margin-top:12px;">
+          <span style="color:var(--text-dim);"># mprocs.yaml</span><br>
+          procs:<br>
+          &nbsp;&nbsp;server: npm run dev<br>
+          &nbsp;&nbsp;watch: bun --watch test<br>
+          &nbsp;&nbsp;agent: pi
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: Windows Detail -->
+  <section class="slide slide--split" style="background-image:radial-gradient(ellipse at 70% 30%, var(--amber-dim) 0%, transparent 50%);">
+    <div class="slide__panels">
+      <div class="slide__panel slide__panel--primary">
+        <p class="slide__label reveal" style="color:var(--amber);">On Windows (outside WSL)</p>
+        <h2 class="slide__heading reveal">psmux + mprocs</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><strong style="color:var(--amber);">psmux</strong> gives tmux UX in PowerShell &mdash; sessions, panes, detach/reattach</li>
+          <li>Install <code>mprocs</code> via <code>scoop install mprocs</code> or <code>npm i -g mprocs</code></li>
+          <li>Run mprocs in a psmux pane &mdash; exact same <code>mprocs.yaml</code> as Linux</li>
+          <li>For VS Code &amp; GUI tools, connect to <strong>WSL</strong> when you need Linux paths</li>
+        </ul>
+      </div>
+      <div class="slide__panel slide__panel--secondary" style="display:flex;flex-direction:column;justify-content:center;gap:16px;font-family:var(--font-mono);font-size:clamp(12px,1.4vw,16px);color:var(--amber);line-height:1.8;">
+        <div class="reveal">
+          <span style="color:var(--text-dim);"># PowerShell</span><br>
+          psmux<br>
+          tmux new-session -s work<br>
+          <span style="color:var(--text-dim);"># Ctrl-b %&nbsp; &rarr; split pane</span><br>
+          <span style="color:var(--text-dim);"># Ctrl-b d&nbsp; &rarr; detach</span>
+        </div>
+        <div class="reveal" style="margin-top:12px;">
+          <span style="color:var(--text-dim);"># Same mprocs.yaml works</span><br>
+          scoop install mprocs<br>
+          mprocs
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE: Mental Model -->
+  <section class="slide slide--content" style="background-image:radial-gradient(ellipse at 50% 50%, var(--teal-dim) 0%, transparent 45%);">
+    <div class="slide__inner">
+      <div class="slide__text">
+        <p class="slide__label reveal" style="color:var(--teal);">Mental Model</p>
+        <h2 class="slide__heading reveal">Two Layers, Any OS</h2>
+        <ul class="slide__bullets reveal" style="margin-top:16px;">
+          <li><strong style="color:var(--green);">tmux</strong> in Linux/WSL &rarr; long-lived workspace layer (sessions, panes, SSH, remote boxes)</li>
+          <li><strong style="color:var(--amber);">psmux</strong> on Windows &rarr; tmux UX when you stay in PowerShell/cmd (no WSL needed)</li>
+          <li><strong style="color:var(--accent);">mprocs</strong> &rarr; project-local process orchestrator inside tmux/psmux, driven by <code>mprocs.yaml</code></li>
+        </ul>
+        <div class="reveal" style="margin-top:24px;padding:16px 20px;background:var(--surface);border:1px solid var(--border-bright);border-radius:8px;">
+          <p style="font-size:clamp(13px,1.6vw,18px);color:var(--text-dim);line-height:1.6;">
+            <strong style="color:var(--text);">Map to threads:</strong>
+            Each tmux pane = one <span style="color:var(--green);">P-thread</span>.
+            mprocs = the <span style="color:var(--accent);">process manager</span> inside each pane.
+            Same muscle memory on Linux, WSL, and Windows.
+          </p>
+        </div>
+      </div>
+      <div class="slide__aside reveal" style="display:flex;flex-direction:column;gap:12px;font-family:var(--font-mono);font-size:clamp(11px,1.2vw,14px);">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--green);font-weight:600;margin-bottom:4px;">WORKSPACE LAYER</div>
+          <div style="color:var(--text-dim);">tmux / psmux</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Sessions &bull; Panes &bull; Detach</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--accent);font-weight:600;margin-bottom:4px;">ORCHESTRATION LAYER</div>
+          <div style="color:var(--text-dim);">mprocs (mprocs.yaml)</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Servers &bull; Watchers &bull; Agents</div>
+        </div>
+        <div style="text-align:center;color:var(--text-dim);font-size:18px;">&darr;</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 16px;">
+          <div style="color:var(--rose);font-weight:600;margin-bottom:4px;">AGENT LAYER</div>
+          <div style="color:var(--text-dim);">pi / claude / codex</div>
+          <div style="color:var(--text-dim);font-size:0.9em;">Threads &bull; Sandboxes &bull; Tools</div>
         </div>
       </div>
     </div>
